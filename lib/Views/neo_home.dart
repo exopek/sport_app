@@ -1,331 +1,91 @@
-
-
 import 'dart:io';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_animations/simple_animations.dart';
+import 'package:video_app/CustomWidgets/neoContainer.dart';
 import 'package:video_app/CustomWidgets/rating.dart';
-import 'package:video_app/Models/models.dart';
+import 'package:video_app/Helpers/helpers.dart';
 import 'package:video_app/Notifyers/tabbar_color.dart';
 import 'package:video_app/Services/firebase_auth_service.dart';
-import 'package:video_app/Services/storage_handler.dart';
-import 'package:video_app/Views/profil.dart';
-import 'package:video_app/Views/settings.dart';
+import 'package:video_app/Services/firebase_storage_service.dart';
 
-import '../Helpers/helpers.dart';
-import 'package:flutter/material.dart';
 import '../videoplayerservice.dart';
-import '../Services/firebase_storage_service.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
-import 'package:path_provider/path_provider.dart';
 
-class HomePageNeo extends StatefulWidget {
-  @override
-  _HomePageNeoState createState() => _HomePageNeoState();
-}
-
-class _HomePageNeoState extends State<HomePageNeo> {
-
-
-
+class HomePageNeo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final FirebaseAuthService auth = Provider.of<FirebaseAuthService>(context);
-    final TabbarColor neoToggle = Provider.of<TabbarColor>(context, listen: false);
-    return DefaultTabController(
-      length: 2,
-      initialIndex: 0,
-      child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            leading: Container(),
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              title: Center(
-                child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    StreamBuilder<OwnUser>(
-                        stream: auth.onAuthStateChanged,
-                        builder: (_, AsyncSnapshot<OwnUser> snapshot) {
-                          if (snapshot.hasData) {
-                            return InkWell(
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return MultiProvider(
-                                      providers: [Provider<FirebaseAuthService>(
-                                        create: (context) => FirebaseAuthService(),
-                                      ),
-                                        Provider(
-                                          create: (context) => StorageHandler(uid: snapshot.data.uid),
-                                        )
-                                      ],
-                                      child: ProfilPage(),
-                                    );
-                                  },
-                                ),
-                              ),
-                              child: Container(
-                                  margin: EdgeInsets.all(20.0),
-                                  height: 80,
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              snapshot.data.foto
-                                          )
-                                      )
-                                  )
-                              ),
-                            );
-                          } else {
-                            return Text('Foto');
-                          }
-                        }
-                    ),
-
-                    StreamBuilder<OwnUser>(
-                        stream: auth.onAuthStateChanged,
-                        builder: (_, AsyncSnapshot<OwnUser> snapshot) {
-                          if (snapshot.hasData) {
-                            return Text(
-                              'Hi '+snapshot.data.name,
-                              style: TextStyle(color: Colors.white),
-                            );
-                          } else {
-                            return Text(
-                              'Hi',
-                              style: TextStyle(color: Colors.white),
-                            ); }
-
-                        }
-                    ),
-
-
-                  ],
-                ),
-              ),
-            ),
-            bottom: PreferredSize(
-              preferredSize: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height/5
-              ),
-              child: TabBar(
-                indicatorColor: Colors.transparent,
-                onTap: (index) => neoToggle.updateTabColor(index, context),
-                tabs: [
-                  Consumer<TabbarColor>(
-                    builder: (context, data, child) {
-                      return Container(
-                      height: MediaQuery.of(context).size.height/15,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        color: data.tabColor1[0],
-                          boxShadow: [
-                            BoxShadow(
-                                color: data.tabColor1[1],
-                                offset: Offset(2.0, 2.0),
-                                blurRadius: 10.0,
-                                spreadRadius: 1.0),
-                            BoxShadow(
-                                color: data.tabColor1[2],
-                                offset: Offset(-2.0, -2.0),
-                                blurRadius: 10.0,
-                                spreadRadius: 1.0),
-                          ]
-                      ),
-                      child: Center(
-                      child: Text('Workouts',
-                      style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0
-                      ),)),
-                      );
-                    }
-                  ),
-                  Neumorphic(
-                    //height: MediaQuery.of(context).size.height/15,
-
-                    child: Center(
-                        child: Text('Favoriten',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0
-                          ),)),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          /*
-          AppBar(
-            title: Text('Workouts',
-              style: TextStyle(
-                  color: Colors.white
-              ),),
-            actions: [
-              Padding(
-                  padding: EdgeInsets.only(right: 20.0),
-                  child: GestureDetector(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return Provider<FirebaseAuthService>(
-                            create: (context) => FirebaseAuthService(),
-                            child: ProfilPage(),
-                          );
-                        },
-                      ),
-                    ),
-                    child: Icon(
-                        Icons.more_vert
-                    ),
-                  )
-              ),
-            ],
-            // backgroundColor: Colors.redAccent,
-          ),
-          */
-          bottomNavigationBar: BottomAppBar(
-            color: Colors.black,
-            child: Container(
-              height: MediaQuery.of(context).size.height/10,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-
-                  gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      stops: [0.2, 0.4, 0.9],
-                      colors: [Colors.red, Colors.red[700], Colors.red[900]]
-                  ),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      topRight: Radius.circular(30.0))
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(icon: Icon(
-                    Icons.api_sharp,
-                    size: 30.0,
-                  ), onPressed: () {}),
-                  IconButton(icon: Icon(
-                    Icons.search,
-                    size: 30.0,
-                  ), onPressed: () {}),
-                  IconButton(icon: Icon(
-                    Icons.analytics_outlined,
-                    size: 30.0,
-                  ), onPressed: () {}
-                  ),
-                  IconButton(icon: Icon(
-                    Icons.settings,
-                    size: 30.0,
-                  ), onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return SettingsPage();
-                      },
-                    ),
-                  ),
-                  )
-                ],
-              ),
-            ),
-
-          ),
-          backgroundColor: Colors.black45,
-          body: TabBarView(
-            children: [
-              _tabBarViewWorkout(context),
-              _tabBarViewFavorits(context)
-            ],
-          )
+    return Container(
+      decoration: BoxDecoration(
+        gradient: RadialGradient(
+          center: Alignment(0.1, 0.3),
+          focal: Alignment(-0.1, 0.6),
+          focalRadius: 2,
+          colors: [Colors.grey[900], Colors.grey[850], Colors.grey[800], Colors.grey[700]],
+          stops: [0.2, 0.5, 0.7, 1],
+        )
+      ),
+      child: Column(
+        children: [
+          _neoTabBar(context),
+          _tabBarViewWorkout(context)
+        ],
       ),
     );
   }
 
-  Widget _tabBarViewFavorits(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 100.0),
-      child: Column(
-        children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
-              child: Text(
-                'No Results',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0
+  Widget _neoTabBar(BuildContext context) {
+    final TabbarColor neoBar = Provider.of<TabbarColor>(context);
+    return  Container(
+      height: MediaQuery.of(context).size.height/12,
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(width: 8.0,),
+            Expanded(
+              child: GestureDetector(
+                onTap: () => neoBar.updateTabColor(0, context),
+                    child: Consumer<TabbarColor>(
+                      builder: (context, data, child) {
+                        return NeoContainer(shadowColor1: data.tabColor1[2], shadowColor2: data.tabColor1[1], containerColor: data.tabColor1[0],
+                            containerText: 'Workouts');
+                      }
+                    ),
+                ),
+            ),
+            SizedBox(width: 10.0,),
+            Expanded(
+              child: GestureDetector(
+                onTap: () => neoBar.updateTabColor(1, context),
+                child: Consumer<TabbarColor>(
+                    builder: (context, data, child) {
+                      return NeoContainer(shadowColor1: data.tabColor2[2], shadowColor2: data.tabColor2[1], containerColor: data.tabColor2[0],
+                          containerText: 'Muskelgruppen');
+                    }
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5.0),
-            child: Text(
-              'Du hast noch keinen Favoriten',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.0
+            SizedBox(width: 10.0,),
+            Expanded(
+              child: GestureDetector(
+                onTap: () => neoBar.updateTabColor(2, context),
+                child: Consumer<TabbarColor>(
+                    builder: (context, data, child) {
+                      return NeoContainer(shadowColor1: data.tabColor3[2], shadowColor2: data.tabColor3[1], containerColor: data.tabColor3[0],
+                          containerText: 'Favoriten');
+                    }
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5.0),
-            child: Text(
-              'deiner Liste hinzugefügt.',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.0
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5.0),
-            child: Text(
-              'Finde Workouts die dir gefallen',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.0
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5.0),
-            child: Text(
-              'und füge sie über einen Klick auf',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.0
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5.0),
-            child: Text(
-              'den Stern, deiner Favoritenliste hinzu.',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.0
-              ),
-            ),
-          ),
-        ],
-      ),
+            SizedBox(width: 8.0,)
+
+
+          ]
+        ),
     );
+
   }
 
   Widget _tabBarViewWorkout(BuildContext context) {
@@ -473,6 +233,4 @@ class _HomePageNeoState extends State<HomePageNeo> {
 
 
   }
-
-
 }
