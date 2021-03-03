@@ -37,6 +37,64 @@ class FirebaseAuthService {
     await Firebase.initializeApp();
   }
 
+  Future<OwnUser> createUserAccount(String email, String password) async {
+    await Firebase.initializeApp();
+    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+    try {
+      UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email,
+          password: password
+      );
+      final User user = userCredential.user;
+      if (user != null) {
+        assert(!user.isAnonymous);
+        assert(await user.getIdToken() != null);
+
+        final User currentUser = _firebaseAuth.currentUser;
+        assert(user.uid == currentUser.uid);
+
+        return _userFromFirebase(user);
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<OwnUser> signInWithEmail(String email, String password) async {
+    await Firebase.initializeApp();
+    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+    try {
+      UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+          email: email,
+          password: password
+      );
+      final User user = userCredential.user;
+      if (user != null) {
+        assert(!user.isAnonymous);
+        assert(await user.getIdToken() != null);
+
+        final User currentUser = _firebaseAuth.currentUser;
+        assert(user.uid == currentUser.uid);
+
+        return _userFromFirebase(user);
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('Es gibt kein Nutzerkonto');
+      } else if (e.code == 'wrong-password') {
+        print('Falsches Passwort');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<OwnUser> signInWithGoogle() async {
     await Firebase.initializeApp();
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -68,6 +126,8 @@ class FirebaseAuthService {
 
     return null;
   }
+
+
 
   Future<String> signOutGoogle() async {
     //final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;

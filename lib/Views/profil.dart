@@ -77,7 +77,7 @@ class _ProfilPageState extends State<ProfilPage> {
                                     return StreamBuilder<OwnUser>(
                                     stream: auth.onAuthStateChanged,
                                     builder: (_, AsyncSnapshot<OwnUser> snapshot) {
-                                      if (snapshot.hasData) {
+                                      if (snapshot.hasData && snapshot.data.foto != null) {
                                       return InkWell(
                                         onTap: () async {
                                           final pickedImage = await HelperFunctions().pickImage();
@@ -107,15 +107,22 @@ class _ProfilPageState extends State<ProfilPage> {
                                         ),
                                       );
                                       } else {
-                                        return Container(
-                                          height: 90.0,
-                                          width: 90.0,
-                                          child: Icon(Icons.camera_alt_rounded,
-                                            color: Colors.white,),
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.black
+                                        return InkWell(
+                                          onTap: () async {
+                                            final pickedImage = await HelperFunctions().pickImage();
+                                            File UserImage = File(pickedImage.path);
+                                            await storage.uploadProfilImage(UserImage);
+                                          },
+                                          child: Container(
+                                            height: 90.0,
+                                            width: 90.0,
+                                            child: Icon(Icons.camera_alt_rounded,
+                                              color: Colors.white,),
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.grey[900]
                                           ),
+                                        )
                                         );
                                       }
                                     });
@@ -163,7 +170,7 @@ class _ProfilPageState extends State<ProfilPage> {
                         child: StreamBuilder<OwnUser>(
                           stream: auth.onAuthStateChanged,
                           builder: (_, AsyncSnapshot<OwnUser> snapshot) {
-                            if (snapshot.hasData) {
+                            if (snapshot.hasData && snapshot.data.name != null) {
                               return Text(snapshot.data.name,
                                 style: TextStyle(
                                   color: Colors.white,
@@ -180,7 +187,8 @@ class _ProfilPageState extends State<ProfilPage> {
                         ),
                       ),
                       Padding(
-                          padding: const EdgeInsets.only(top: 390),
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height/2,),
                       child: Container(
                         height: MediaQuery.of(context).size.height/10,
                         width: MediaQuery.of(context).size.width,

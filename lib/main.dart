@@ -18,8 +18,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
 
-        theme: Theme.myTheme,
-        /*ThemeData(
+        theme:
+        /*
+        Theme.myTheme,
+
+         */
+        ThemeData(
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -36,7 +40,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
 
       ),
-      */
+
 
         home: SignInPage(),
       ),

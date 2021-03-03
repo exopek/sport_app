@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
+
 class HelperFunctions {
   //String id;
 
@@ -12,6 +14,10 @@ class HelperFunctions {
     assert(id != null);
   }
   */
+
+  Color mixColor(Color colorOne ,Color colorTwo, double amount) {
+    return Color.lerp(colorOne ,colorTwo, amount);
+  }
 
   Future<PickedFile> pickImage() async {
     final pickedFile = await ImagePicker().getImage(

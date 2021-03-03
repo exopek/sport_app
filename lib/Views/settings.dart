@@ -1,13 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:video_app/CustomWidgets/neoContainer.dart';
 import 'package:video_app/Helpers/helpers.dart';
+import 'package:video_app/Notifyers/listViewIndex.dart';
+import 'package:video_app/Notifyers/tabbar_color.dart';
+import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Services/firebase_auth_service.dart';
+import 'package:video_app/Services/storage_handler.dart';
 import 'package:video_app/Views/profil.dart';
 import 'package:video_app/Views/test_home.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import 'home_musik_style.dart';
+import 'neo_home.dart';
+
 class SettingsPage extends StatefulWidget {
+  final String uid;
+
+  const SettingsPage({Key key,@required this.uid}) : super(key: key);
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -16,17 +27,18 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[100],
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
         elevation: 0.0,
         leading: Container(),
-        backgroundColor: Colors.blueGrey[100],
+        backgroundColor: Colors.grey[300],
         title: Text('Einstellungen',
           style: TextStyle(
               color: Colors.grey[800],
             fontWeight: FontWeight.w500,
           ),),
       ),
+      /*
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         child: Container(
@@ -75,6 +87,54 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
 
+      ),
+
+       */
+      bottomNavigationBar: BottomAppBar(
+        elevation: 0.0,
+        color: Colors.grey[300],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                builder: (context) {
+                return MultiProvider(
+                    providers: [
+                      Provider(create: (context) => StorageHandler(uid: widget.uid),),
+                      Provider(create: (context) => DatabaseHandler(uid: widget.uid),),
+                      ChangeNotifierProvider(create: (context) => ListViewIndex(context: context)),
+                      ChangeNotifierProvider(create: (context) => TabbarColor(context: context))
+                    ],
+                    child: HomePageMusikStyle());
+                  },
+                ),
+               ),
+              child: NeoContainer(
+              shadowColor1: Colors.grey[500],
+              shadowColor2: Colors.grey[50],
+              blurRadius1: 5.0,
+              blurRadius2: 3.0,
+              spreadRadius1: 0.0,
+              spreadRadius2: 0.0,
+              circleShape: true,
+              containerHeight: MediaQuery.of(context).size.height/7,
+              containerWidth: MediaQuery.of(context).size.width/7,
+              gradientColor1: Colors.grey[600],
+              gradientColor2: Colors.grey[500],
+              gradientColor3: Colors.grey[200],
+              gradientColor4: Colors.grey[200],
+              containerChild: Center(
+                  child: Icon(
+                    Icons.settings,
+                    color: Colors.grey[800],
+                    size: 20.0,)
+              ),
+          ),
+            ),
+      ]
+        ),
       ),
       body: ListView.builder(
           itemCount: 1,
@@ -139,7 +199,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 300.0),
                     child: Container(
-                      height: MediaQuery.of(context).size.height/6,
+                      height: MediaQuery.of(context).size.height/4.7,
                       width: MediaQuery.of(context).size.width,
                       color: Colors.transparent,
                       child: Row(

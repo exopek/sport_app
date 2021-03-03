@@ -30,6 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   firebase_core: ^0.5.0
   firebase_auth: ^0.18.0+1
+  cloud_firestore: ^0.14.0
   google_sign_in: ^4.5.3
   flick_video_player: ^0.1.1
   video_player: ^0.10.8+1
@@ -43,6 +44,7 @@ dependencies:
   material_design_icons_flutter: ^4.0.5855
   url_launcher: ^5.7.10
   image_picker: ^0.6.7+22
+  glassmorphism: ^1.0.6
   # flutter_neumorphic: ^3.0.4+1
 
 dev_dependencies:

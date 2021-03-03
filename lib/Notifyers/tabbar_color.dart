@@ -17,21 +17,21 @@ class TabbarColor extends ChangeNotifier{
 
    get tabColor1 {
      if (_firstCall == false) {
-       return [Colors.transparent, Colors.transparent, Colors.transparent];
+       return [Color.fromRGBO(19, 19, 19, 40), Color.fromRGBO(40, 40, 40, 40), Color.fromRGBO(5, 5, 5, 40)];
      }
     return _color1;
   }
 
    get tabColor2 {
      if (_firstCall == false) {
-       return [Colors.grey, Colors.white, Colors.black];
+       return [Color.fromRGBO(19, 19, 19, 40), Colors.transparent, Colors.transparent];
      }
     return _color2;
   }
 
   get tabColor3 {
     if (_firstCall == false) {
-      return [Colors.grey, Colors.white, Colors.black];
+      return [Color.fromRGBO(19, 19, 19, 40), Colors.transparent, Colors.transparent];
     }
     return _color3;
   }
@@ -40,23 +40,23 @@ class TabbarColor extends ChangeNotifier{
     if (index == 0) {
       _index = index;
       _firstCall = true;
-      _color1 = [Colors.transparent, Colors.transparent, Colors.transparent];
-      _color2 = [Colors.grey, Colors.white, Colors.black];
-      _color3 = [Colors.grey, Colors.white, Colors.black];
+      _color1 = [Color.fromRGBO(19, 19, 19, 40), Color.fromRGBO(40, 40, 40, 40), Color.fromRGBO(5, 5, 5, 40)];
+      _color2 = [Color.fromRGBO(19, 19, 19, 40), Colors.transparent, Colors.transparent];
+      _color3 = [Color.fromRGBO(19, 19, 19, 40), Colors.transparent, Colors.transparent];
     }
     else if (index == 1) {
       _index = index;
       _firstCall = true;
-      _color1 = [Colors.grey, Colors.white, Colors.black];
-      _color2 = [Colors.transparent, Colors.transparent, Colors.transparent];
-      _color3 = [Colors.grey, Colors.white, Colors.black];
+      _color1 = [Color.fromRGBO(19, 19, 19, 40), Colors.transparent, Colors.transparent];
+      _color2 = [Color.fromRGBO(19, 19, 19, 40), Color.fromRGBO(40, 40, 40, 40), Color.fromRGBO(5, 5, 5, 40)];
+      _color3 = [Color.fromRGBO(19, 19, 19, 40), Colors.transparent, Colors.transparent];
     }
     else if (index == 2) {
       _index = index;
       _firstCall = true;
-      _color1 = [Colors.grey, Colors.white, Colors.black];
-      _color2 = [Colors.grey, Colors.white, Colors.black];
-      _color3 = [Colors.transparent, Colors.transparent, Colors.transparent];
+      _color1 = [Color.fromRGBO(19, 19, 19, 40), Colors.transparent, Colors.transparent];
+      _color2 = [Color.fromRGBO(19, 19, 19, 40), Colors.transparent, Colors.transparent];
+      _color3 = [Color.fromRGBO(19, 19, 19, 40), Color.fromRGBO(40, 40, 40, 40), Color.fromRGBO(5, 5, 5, 40)];
     }
     notifyListeners();
   }
