@@ -36,6 +36,7 @@ class _DashboardStyleState extends State<DashboardStyle> {
   void initState() {
     favoritePageController = PageController();
     indexController = StreamController();
+    //indexController.add(0);
     super.initState();
   }
 
@@ -270,12 +271,12 @@ class _DashboardStyleState extends State<DashboardStyle> {
   Widget _header(BuildContext context, int index, int listIndex) {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
     //final ListViewIndex index = Provider.of<ListViewIndex>(context);
-    Stream<int> indexStream = indexController.stream;
+    Stream<dynamic> indexStream = indexController.stream;
     return StreamBuilder<List<Favorite>>(
         stream: database.favoriteStream(),
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data.isNotEmpty) {
-            return StreamBuilder<int>(
+            return StreamBuilder<dynamic>(
               stream: indexStream,
               builder: (context, indexSnapshot) {
                 return Column(
@@ -524,9 +525,9 @@ class _DashboardStyleState extends State<DashboardStyle> {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
     final ListViewIndex index = Provider.of<ListViewIndex>(context);
     return Padding(
-      padding: EdgeInsets.only(left: 80.0),
+      padding: EdgeInsets.only(left: 90.0, top: 10.0, right: 10.0),
       child: Container(
-        height: MediaQuery.of(context).size.height/2.4,
+        height: MediaQuery.of(context).size.height/2.5,
         width: MediaQuery.of(context).size.width,
         child: StreamBuilder<List<Favorite>>(
             stream: database.favoriteStream(),
@@ -539,9 +540,7 @@ class _DashboardStyleState extends State<DashboardStyle> {
                     itemBuilder: (BuildContext context, int Index) {
                       //index.updateIndex(Index, context);
                       indexController.add(Index); // Setzt die Überschrift für das angezeigte Workout
-                      return Material(
-                        color: Colors.transparent,
-                        child: GestureDetector(
+                      return GestureDetector(
                             onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) {
@@ -549,31 +548,14 @@ class _DashboardStyleState extends State<DashboardStyle> {
                                 },
                               ),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 10.0, bottom: 10.0),
-                              child: NeoContainer(
-                                  containerHeight: MediaQuery.of(context).size.height/2.0,
-                                  containerWidth: MediaQuery.of(context).size.width/1.4,
-                                  circleShape: false,
-                                  containerBorderRadius: BorderRadius.only(topLeft: Radius.circular(35.0), bottomLeft: Radius.circular(35.0)),
-                                  shadowColor1: Color.fromRGBO(22, 22, 22, 1),
-                                  shadowColor2: Color.fromRGBO(45, 45, 45, 1),
-                                  gradientColor1: Color.fromRGBO(33, 33, 34, 1),
-                                  gradientColor2: Color.fromRGBO(33, 33, 34, 1),
-                                  gradientColor3: Color.fromRGBO(33, 33, 34, 1),
-                                  gradientColor4: Color.fromRGBO(33, 33, 34, 1),
-                                  spreadRadius1: 1.0,
-                                  spreadRadius2: 0.0,
-                                  blurRadius2: 2.0,
-                                  blurRadius1: 4.0,
-                                  shadow1Offset: 5.0,
-                                  shadow2Offset: -4.0,
-                                  containerChild:  _imageContainerContentF(context,
-                                      [snapshot.data[Index].workout, snapshot.data[Index].duration, snapshot.data[Index].level],
-                                      snapshot.data[Index].thumbnail, snapshot.data[Index].videoPath, Index)),)
-                        ),
 
+                              child: _imageContainerContentF(context,
+                                      snapshot.data[Index].workout,
+                                      snapshot.data[Index].thumbnail, Index)
                       );
+
+
+
                     }
                 );
               } else if (snapshot.connectionState == ConnectionState.waiting) {
@@ -689,74 +671,61 @@ class _DashboardStyleState extends State<DashboardStyle> {
 
   Widget _tabBarViewWorkout(BuildContext context) {
     final FirebaseAuthService auth = Provider.of<FirebaseAuthService>(context);
-    return Container(
-      height: MediaQuery.of(context).size.height/2.4,
-      width: MediaQuery.of(context).size.width,
-      child: FutureBuilder(
-          future: FirebaseStorageService.instance.videoDownload(context, '/videos/'),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final value = snapshot.data;
-              return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: value['videoUrls'].length,
-                  itemBuilder: (BuildContext context, int Index) {
-                    var cardInput = HelperFunctions().splitSeparatedWords(value['pathInfo'][Index], ['/','.','_']);
-                    return Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return SamplePlayer(videourl: value['videoUrls'][Index]);
-                            },
+    final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
+    return Padding(
+      padding: EdgeInsets.only(left: 90.0, top: 10.0, right: 10.0),
+      child: Container(
+        height: MediaQuery.of(context).size.height/2.5,
+        width: MediaQuery.of(context).size.width,
+        child: StreamBuilder<List<Workout>>(
+            stream: database.workoutStream(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final value = snapshot.data;
+                return PageView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int Index) {
+                      //var cardInput = HelperFunctions().splitSeparatedWords(value['pathInfo'][Index], ['/','.','_']);
+                      return InkWell(
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return SamplePlayer(videourl: snapshot.data[Index].videoPath);
+                              },
+                            ),
                           ),
-                        ),
-                        child: Padding(
-                            padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 10.0, bottom: 15.0),
-                            child: NeoContainer(
-                              containerHeight: MediaQuery.of(context).size.height/2.0,
-                              containerWidth: MediaQuery.of(context).size.width/1.1,
-                              circleShape: false,
-                              shadowColor1: Color.fromRGBO(22, 22, 22, 1),
-                              shadowColor2: Color.fromRGBO(45, 45, 45, 1),
-                              gradientColor1: Color.fromRGBO(33, 33, 34, 1),
-                              gradientColor2: Color.fromRGBO(33, 33, 34, 1),
-                              gradientColor3: Color.fromRGBO(33, 33, 34, 1),
-                              gradientColor4: Color.fromRGBO(33, 33, 34, 1),
-                              spreadRadius1: 0.0,
-                              spreadRadius2: 0.0,
-                              containerChild: _imageContainerContent(context,
-                                cardInput, value['thumbnails'][Index], value['videoUrls'][Index], Index,),)
-                        ),
-                      ),
-                    );
-                  });
-            } else {
-              return ListView.builder(
-                  scrollDirection: Axis.horizontal,
+                              child: _imageContainerContent(context,
+                                  snapshot.data[Index].bodyPart, snapshot.data[Index].duration, snapshot.data[Index].level, snapshot.data[Index].workout, snapshot.data[Index].thumbnail, snapshot.data[Index].videoPath, Index,),
 
-                  itemCount: 5,
-                  itemBuilder: (BuildContext context, int Index) {
-                    return Padding(
-                        padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 10.0, bottom: 10.0),
-                        child: NeoContainer(
-                          containerHeight: MediaQuery.of(context).size.height/2.0,
-                          containerWidth: MediaQuery.of(context).size.width/1.1,
-                          shadowColor1: Color.fromRGBO(5, 5, 5, 40),
-                          shadowColor2: Color.fromRGBO(40, 40, 40, 40),
-                          gradientColor1: Color.fromRGBO(19, 19, 19, 40),
-                          gradientColor2: Color.fromRGBO(19, 19, 19, 40),
-                          gradientColor3: Color.fromRGBO(19, 19, 19, 40),
-                          gradientColor4: Color.fromRGBO(19, 19, 19, 40),
-                          circleShape: false,
-                          spreadRadius1: 0.0,
-                          spreadRadius2: 0.0,)
-                    );
-                  });
+                        );
+                    });
+              } else {
+                return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+
+                    itemCount: 5,
+                    itemBuilder: (BuildContext context, int Index) {
+                      return Padding(
+                          padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 10.0, bottom: 10.0),
+                          child: NeoContainer(
+                            containerHeight: MediaQuery.of(context).size.height/2.0,
+                            containerWidth: MediaQuery.of(context).size.width/1.1,
+                            shadowColor1: Color.fromRGBO(5, 5, 5, 40),
+                            shadowColor2: Color.fromRGBO(40, 40, 40, 40),
+                            gradientColor1: Color.fromRGBO(19, 19, 19, 40),
+                            gradientColor2: Color.fromRGBO(19, 19, 19, 40),
+                            gradientColor3: Color.fromRGBO(19, 19, 19, 40),
+                            gradientColor4: Color.fromRGBO(19, 19, 19, 40),
+                            circleShape: false,
+                            spreadRadius1: 0.0,
+                            spreadRadius2: 0.0,)
+                      );
+                    });
+              }
+
             }
-
-          }
+        ),
       ),
     );
   }
@@ -774,162 +743,25 @@ class _DashboardStyleState extends State<DashboardStyle> {
     );
   }
 
-  Widget _imageContainerContent(BuildContext context, List<dynamic> input, String thumbnail, String videoUrl, int index) {
+  Widget _imageContainerContent(BuildContext context, String workout, String duration, String level, String bodyPart, String thumbnail, String videoUrl, int index) {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
     return Stack(
         children: [
-          Padding(
-              padding: const EdgeInsets.all(0),
-              child: Container(
-                //height: MediaQuery.of(context).size.height/3,
-                //width: MediaQuery.of(context).size.width/2,
+          Container(
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: FileImage(File(thumbnail)),
+                        image: NetworkImage(thumbnail),
                         fit: BoxFit.fill
                     ),
-                    borderRadius: BorderRadius.all(Radius.circular(15.0))
+                    borderRadius: BorderRadius.all(Radius.circular(35.0))
                 ),
-              )
-          ),
-          /*
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: NeoContainer(
-              circleShape: false,
-              containerHeight: MediaQuery.of(context).size.height/25,
-              containerWidth: MediaQuery.of(context).size.width/3.0,
-              shadow1Offset: 4.5,
-              shadow2Offset: -2.0,
-              blurRadius2: 3.0,
-              blurRadius1: 3.0,
-              spreadRadius2: 0.0,
-              spreadRadius1: 0.0,
-              shadowColor1: Color.fromRGBO(40, 40, 40, 40),
-              shadowColor2: Color.fromRGBO(5, 5, 5, 40),
-              gradientColor1: Color.fromRGBO(19, 19, 19, 40),
-              gradientColor2: Color.fromRGBO(19, 19, 19, 40),
-              gradientColor3: Color.fromRGBO(19, 19, 19, 40),
-              gradientColor4: Color.fromRGBO(19, 19, 19, 40),
-              containerChild: Center(
-                child: Text(input[0],
-                  style: TextStyle(
-                      fontStyle: FontStyle.normal,
-                      fontSize: 20,
-                      color: Colors.grey[200]
-                  ),),
               ),
-            ),
-          ),
 
-           */
-          Padding(
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height/5.0,
-                left: MediaQuery.of(context).size.height/45.0,),
-              child: NeoContainer(
-                circleShape: false,
-                containerHeight: MediaQuery.of(context).size.width * 0.5 - 20,
-                containerWidth: MediaQuery.of(context).size.height * 0.25 - 20,
-                shadow1Offset: 4.5,
-                shadow2Offset: -2.0,
-                blurRadius2: 3.0,
-                blurRadius1: 3.0,
-                spreadRadius2: 0.0,
-                spreadRadius1: 0.0,
-                shadowColor1: Color.fromRGBO(40, 40, 40, 40),
-                shadowColor2: Color.fromRGBO(5, 5, 5, 40),
-                gradientColor1: Color.fromRGBO(19, 19, 19, 40),
-                gradientColor2: Color.fromRGBO(19, 19, 19, 40),
-                gradientColor3: Color.fromRGBO(19, 19, 19, 40),
-                gradientColor4: Color.fromRGBO(19, 19, 19, 40),
-                containerChild: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Text('Level: ',
-                        style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.redAccent
-                        ),),
-                    ),
-                    StarDisplayWidget(
-                      value: int.parse(input[2]),
-                      filledStar: Icon(Icons.adjust, color: Colors.redAccent, size: 18.0),
-                      unfilledStar: Icon(Icons.adjust, color: Colors.grey, size: 18.0),
-                    ),
-                  ],
-                ),
-              )
-          ),
+
           Padding(
             padding: EdgeInsets.only(
               top: MediaQuery.of(context).size.height/45.0,
-              left: MediaQuery.of(context).size.height/45.0,),
-            child: GlassmorphicContainer(
-              width: MediaQuery.of(context).size.width * 0.5 - 20,
-              height: MediaQuery.of(context).size.height * 0.2 - 20,
-              borderRadius: 35,
-              blur: 14,
-              alignment: Alignment.bottomCenter,
-              border: 2,
-              linearGradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF0FFFF).withOpacity(0.2),
-                  Color(0xFF0FFFF).withOpacity(0.2),
-                ],
-              ),
-              borderGradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF0FFFF).withOpacity(1),
-                  Color(0xFFFFFFF),
-                  Color(0xFF0FFFF).withOpacity(1),
-                ],
-              ),
-              child: Center(
-                child: Text('Dauer: '+input[1],
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.redAccent
-                  ),),
-              ),
-            ),
-            /*
-            NeoContainer(
-              circleShape: false,
-              containerHeight: MediaQuery.of(context).size.height/6.0,
-              containerWidth: MediaQuery.of(context).size.width/2.6,
-              shadow1Offset: 4.5,
-              shadow2Offset: -2.0,
-              blurRadius2: 3.0,
-              blurRadius1: 3.0,
-              spreadRadius2: 0.0,
-              spreadRadius1: 0.0,
-              shadowColor1: Color.fromRGBO(5, 5, 5, 40),
-              shadowColor2: Colors.white,
-              gradientColor1: Color.fromRGBO(33, 33, 34, 1),
-              gradientColor2: Color.fromRGBO(33, 33, 34, 1),
-              gradientColor3: Color.fromRGBO(33, 33, 34, 1),
-              gradientColor4: Color.fromRGBO(33, 33, 34, 1),
-              containerChild: Center(
-                child: Text('Dauer: '+input[1],
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.redAccent
-                  ),),
-              ),
-            ),
-
-             */
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height/45.0,
-              left: MediaQuery.of(context).size.height/2.4,),
+              left: MediaQuery.of(context).size.width/1.8,),
             child: NeoContainer(
               containerHeight: MediaQuery.of(context).size.height/20.0,
               containerWidth: MediaQuery.of(context).size.width/8.0,
@@ -949,175 +781,39 @@ class _DashboardStyleState extends State<DashboardStyle> {
                 child: IconButton(
                     color: Colors.redAccent,
                     icon: Icon(MdiIcons.star),
-                    onPressed: () => database.createFavorite(Favorite(videoPath: videoUrl, duration: input[1], workout: input[0], level: input[2], thumbnail: thumbnail))),
+                    onPressed: () => database.createFavorite(Favorite(
+                        videoPath: videoUrl,
+                        duration: duration,
+                        workout: workout,
+                        level: level,
+                        thumbnail: thumbnail,
+                        bodyPart: bodyPart))),
               ),
             ),)
         ]
     );
   }
 
-  Widget _imageContainerContentF(BuildContext context, List<dynamic> input, String thumbnail, String videoUrl, int index) {
+  Widget _imageContainerContentF(BuildContext context, String workout, String thumbnail, int index) {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
     return Stack(
         children: [
           Padding(
               padding: const EdgeInsets.all(0),
               child: Container(
-                //height: MediaQuery.of(context).size.height/3,
-                //width: MediaQuery.of(context).size.width/2,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: FileImage(File(thumbnail)),
+                        image: NetworkImage(thumbnail),
                         fit: BoxFit.fill
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(35.0))
                 ),
               )
           ),
-          /*
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: NeoContainer(
-              circleShape: false,
-              containerHeight: MediaQuery.of(context).size.height/25,
-              containerWidth: MediaQuery.of(context).size.width/3.0,
-              shadow1Offset: 4.5,
-              shadow2Offset: -2.0,
-              blurRadius2: 3.0,
-              blurRadius1: 3.0,
-              spreadRadius2: 0.0,
-              spreadRadius1: 0.0,
-              shadowColor1: Color.fromRGBO(40, 40, 40, 40),
-              shadowColor2: Color.fromRGBO(5, 5, 5, 40),
-              gradientColor1: Color.fromRGBO(19, 19, 19, 40),
-              gradientColor2: Color.fromRGBO(19, 19, 19, 40),
-              gradientColor3: Color.fromRGBO(19, 19, 19, 40),
-              gradientColor4: Color.fromRGBO(19, 19, 19, 40),
-              containerChild: Center(
-                child: Text(input[0],
-                  style: TextStyle(
-                      fontStyle: FontStyle.normal,
-                      fontSize: 20,
-                      color: Colors.grey[200]
-                  ),),
-              ),
-            ),
-          ),
-
-           */
-          /*
-          Padding(
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height/5.0,
-                left: MediaQuery.of(context).size.height/45.0,),
-              child: NeoContainer(
-                circleShape: false,
-                containerHeight: MediaQuery.of(context).size.width * 0.5 - 20,
-                containerWidth: MediaQuery.of(context).size.height * 0.25 - 20,
-                shadow1Offset: 4.5,
-                shadow2Offset: -2.0,
-                blurRadius2: 3.0,
-                blurRadius1: 3.0,
-                spreadRadius2: 0.0,
-                spreadRadius1: 0.0,
-                shadowColor1: Color.fromRGBO(40, 40, 40, 40),
-                shadowColor2: Color.fromRGBO(5, 5, 5, 40),
-                gradientColor1: Color.fromRGBO(19, 19, 19, 40),
-                gradientColor2: Color.fromRGBO(19, 19, 19, 40),
-                gradientColor3: Color.fromRGBO(19, 19, 19, 40),
-                gradientColor4: Color.fromRGBO(19, 19, 19, 40),
-                containerChild: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Text('Level: ',
-                        style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.redAccent
-                        ),),
-                    ),
-                    StarDisplayWidget(
-                      value: int.parse(input[2]),
-                      filledStar: Icon(Icons.adjust, color: Colors.redAccent, size: 18.0),
-                      unfilledStar: Icon(Icons.adjust, color: Colors.grey, size: 18.0),
-                    ),
-                  ],
-                ),
-              )
-          ),
-
-           */
-          /*
           Padding(
             padding: EdgeInsets.only(
               top: MediaQuery.of(context).size.height/45.0,
-              left: MediaQuery.of(context).size.height/45.0,),
-            child: GlassmorphicContainer(
-              width: MediaQuery.of(context).size.width * 0.5 - 20,
-              height: MediaQuery.of(context).size.height * 0.2 - 20,
-              borderRadius: 35,
-              blur: 14,
-              alignment: Alignment.bottomCenter,
-              border: 2,
-              linearGradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF0FFFF).withOpacity(0.2),
-                  Color(0xFF0FFFF).withOpacity(0.2),
-                ],
-              ),
-              borderGradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF0FFFF).withOpacity(1),
-                  Color(0xFFFFFFF),
-                  Color(0xFF0FFFF).withOpacity(1),
-                ],
-              ),
-              child: Center(
-                child: Text('Dauer: '+input[1],
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.redAccent
-                  ),),
-              ),
-            ),
-            /*
-            NeoContainer(
-              circleShape: false,
-              containerHeight: MediaQuery.of(context).size.height/6.0,
-              containerWidth: MediaQuery.of(context).size.width/2.6,
-              shadow1Offset: 4.5,
-              shadow2Offset: -2.0,
-              blurRadius2: 3.0,
-              blurRadius1: 3.0,
-              spreadRadius2: 0.0,
-              spreadRadius1: 0.0,
-              shadowColor1: Color.fromRGBO(5, 5, 5, 40),
-              shadowColor2: Colors.white,
-              gradientColor1: Color.fromRGBO(33, 33, 34, 1),
-              gradientColor2: Color.fromRGBO(33, 33, 34, 1),
-              gradientColor3: Color.fromRGBO(33, 33, 34, 1),
-              gradientColor4: Color.fromRGBO(33, 33, 34, 1),
-              containerChild: Center(
-                child: Text('Dauer: '+input[1],
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.redAccent
-                  ),),
-              ),
-            ),
-
-             */
-          ),
-
-           */
-          Padding(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height/45.0,
-              left: MediaQuery.of(context).size.height/2.4,),
+              left: MediaQuery.of(context).size.width/1.8,),
             child: NeoContainer(
               containerHeight: MediaQuery.of(context).size.height/20.0,
               containerWidth: MediaQuery.of(context).size.width/8.0,
@@ -1137,7 +833,7 @@ class _DashboardStyleState extends State<DashboardStyle> {
                 child: IconButton(
                     color: Colors.redAccent,
                     icon: Icon(MdiIcons.star),
-                    onPressed: () => database.deleteFavorite(input[0])),
+                    onPressed: () => database.deleteFavorite(workout)),
               ),
             ),)
         ]

@@ -28,5 +28,10 @@ class DatabaseHandler {
     builder:  (data) => Favorite.fromMap(data),
   );
 
+  Stream<List<Workout>> workoutStream() => _service.collectionStream(
+    path: CloudPath.getworkouts(),
+    builder:  (data) => Workout.fromMap(data),
+  );
+
 
 }

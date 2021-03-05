@@ -6,4 +6,5 @@ class StoragePath {
 class CloudPath {
   static String setfavorite(String uid, String id) => 'users/$uid/favorites/$id';
   static String getfavorite(String uid) => 'users/$uid/favorites/';
+  static String getworkouts() => 'videos/';
 }
