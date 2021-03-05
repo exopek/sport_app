@@ -1,8 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-class CustomCol {
-  Color blackShadow() {
-    return Color.lerp(Colors.white, Colors.black, 0.5);
-  }
+/// Convenience class to access application colors.
+abstract class AppColors {
+  /// Dark background color.
+  static const Color backgroundColor = Color(0xFF191D1F);
+
+  /// Slightly lighter version of [backgroundColor].
+  static const Color backgroundFadedColor = Color(0xFF191B1C);
+
+  /// Color used for cards and surfaces.
+  static const Color cardColor = Color(0xFF1F2426);
+
+  /// Accent color used in the application.
+  static const Color accentColor = Color(0xFFef8354);
 }

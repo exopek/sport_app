@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:video_app/CustomWidgets/custom_signIn_Button.dart';
 import 'package:video_app/CustomWidgets/neoContainer.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Notifyers/listViewIndex.dart';
@@ -10,6 +11,7 @@ import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Services/firebase_auth_service.dart';
 import 'package:video_app/Services/storage_handler.dart';
 import 'package:video_app/Views/create_account.dart';
+import 'package:video_app/Views/dashboard.dart';
 import 'package:video_app/Views/home_horizontal.dart';
 import 'package:video_app/Views/home_musik_style.dart';
 import 'package:video_app/Views/test_home.dart';
@@ -48,26 +50,29 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
+  //ToDo: dispose controller
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.grey[900],
-        child: Center(
-          child: Column(
-            //mainAxisSize: MainAxisSize.max,
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: MediaQuery.of(context).size.height/15),
-              FlutterLogo(size: 150),
-              SizedBox(height: MediaQuery.of(context).size.height/15),
-              _signInButtonEmail(context),
-              SizedBox(height: MediaQuery.of(context).size.height/20),
-              _signInButton(context),
-              SizedBox(height: MediaQuery.of(context).size.height/15),
-              _createAccountButton(context)
-            ],
+      body: SingleChildScrollView(
+        child: Container(
+          color: Theme.of(context).primaryColor,
+          child: Center(
+            child: Column(
+              //mainAxisSize: MainAxisSize.max,
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: MediaQuery.of(context).size.height/15),
+                FlutterLogo(size: 150),
+                SizedBox(height: MediaQuery.of(context).size.height/15),
+                _signInButtonEmail(context),
+                SizedBox(height: MediaQuery.of(context).size.height/20),
+                _signInButton(context),
+                SizedBox(height: MediaQuery.of(context).size.height/15),
+                _createAccountButton(context)
+              ],
+            ),
           ),
         ),
       ),
@@ -76,56 +81,69 @@ class _SignInPageState extends State<SignInPage> {
 
   Widget _signInButtonEmail(BuildContext context) {
     return Container(
-      height: 250.0,
+      height: MediaQuery.of(context).size.height/3.0,
+      width: MediaQuery.of(context).size.width,
       child: Column(
           children: [
             SizedBox(height: 20.0,),
-             Expanded(
-               child: NeoContainer(
-                  containerHeight: MediaQuery.of(context).size.height/10.0,
-                  containerWidth: MediaQuery.of(context).size.width/1.1,
+            NeoContainer(
+                  containerHeight: MediaQuery.of(context).size.height/17.0,
+                  containerWidth: MediaQuery.of(context).size.width/1.4,
                   containerBorderRadius: BorderRadius.all(Radius.circular(30.0)),
-                  shadowColor2: Color.fromRGBO(5, 5, 5, 40),
-                  shadowColor1: Color.fromRGBO(40, 40, 40, 40),
-                  blurRadius1: 3.0,
-                  blurRadius2: 3.0,
-                  spreadRadius1: 0.0,
-                  spreadRadius2: 0.0,
-                  gradientColor1: Color.fromRGBO(19, 19, 19, 40),
-                  gradientColor2: Color.fromRGBO(19, 19, 19, 40),
-                  gradientColor3: Color.fromRGBO(19, 19, 19, 40),
-                  gradientColor4: Color.fromRGBO(19, 19, 19, 40),
+                  shadowColor2: Color.fromRGBO(8, 8, 8, 1.0),
+                  shadowColor1: Color.fromRGBO(40, 40, 44, 1.0),
+                  blurRadius1: 2.0,
+                  blurRadius2: 2.0,
+                  spreadRadius1: 2.5,
+                  spreadRadius2: 2.5,
+                  shadow2Offset: -2.0,
+                  shadow1Offset: 3.0,
+                  gradientColor1: Theme.of(context).primaryColor,
+                  gradientColor2: Theme.of(context).primaryColor,
+                  gradientColor3: Theme.of(context).primaryColor,
+                  gradientColor4: Theme.of(context).primaryColor,
                   circleShape: false,
                   containerChild: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
                     child: TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none
+                      ),
+                      style: TextStyle(
+                          color: Colors.white
+                      ),
                       controller: emailController,
                     ),
                   ),
                 ),),
-             ),
+
             SizedBox(height: 20.0,),
-            Expanded(
-              child: NeoContainer(
-                containerHeight: MediaQuery.of(context).size.height/10.0,
-                containerWidth: MediaQuery.of(context).size.width/1.1,
+            NeoContainer(
+                containerHeight: MediaQuery.of(context).size.height/17.0,
+                containerWidth: MediaQuery.of(context).size.width/1.4,
                 containerBorderRadius: BorderRadius.all(Radius.circular(30.0)),
-                shadowColor2: Color.fromRGBO(5, 5, 5, 40),
-                shadowColor1: Color.fromRGBO(40, 40, 40, 40),
-                blurRadius1: 3.0,
-                blurRadius2: 3.0,
-                spreadRadius1: 0.0,
-                spreadRadius2: 0.0,
-                gradientColor1: Color.fromRGBO(19, 19, 19, 40),
-                gradientColor2: Color.fromRGBO(19, 19, 19, 40),
-                gradientColor3: Color.fromRGBO(19, 19, 19, 40),
-                gradientColor4: Color.fromRGBO(19, 19, 19, 40),
+                shadowColor2: Color.fromRGBO(8, 8, 8, 1.0),
+                shadowColor1: Color.fromRGBO(40, 40, 44, 1.0),
+                blurRadius1: 2.0,
+                blurRadius2: 2.0,
+                spreadRadius1: 2.5,
+                spreadRadius2: 2.5,
+                shadow2Offset: -2.0,
+                shadow1Offset: 3.0,
+                gradientColor1: Theme.of(context).primaryColor,
+                gradientColor2: Theme.of(context).primaryColor,
+                gradientColor3: Theme.of(context).primaryColor,
+                gradientColor4: Theme.of(context).primaryColor,
                 circleShape: false,
                 containerChild: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
                     child: TextField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          border: InputBorder.none
+                      ),
                       style: TextStyle(
                         color: Colors.white
                       ),
@@ -133,10 +151,11 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ),
                 ),),
-            ),
-            SizedBox(height: 30.0,),
+            SizedBox(height: 5.0,),
+            AddTodoButton(email: emailController.text, password: passwordController.text)
+            /*
             OutlineButton(
-              splashColor: Colors.grey,
+              splashColor: Colors.redAccent,
               onPressed: () {
                 _signInwithEmail(context, emailController.text, passwordController.text).then((result) {
                   if (result != null) {
@@ -181,6 +200,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
             ),
+            */
           ],
         ),
     );
@@ -202,7 +222,7 @@ class _SignInPageState extends State<SignInPage> {
                       ChangeNotifierProvider(create: (context) => TabbarColor(context: context)),
                       ChangeNotifierProvider(create: (context) => ListViewIndex(context: context)),
                     ],
-                      child: HomePageMusikStyle());
+                      child: DashboardStyle());
                 },
               ),
             );
