@@ -15,6 +15,7 @@ import 'package:video_app/Views/dashboard.dart';
 import 'package:video_app/Views/home_horizontal.dart';
 import 'package:video_app/Views/home_musik_style.dart';
 import 'package:video_app/Views/test_home.dart';
+import 'package:video_app/Views/xd_home.dart';
 
 import 'home.dart';
 import 'neo_home.dart';
@@ -222,7 +223,7 @@ class _SignInPageState extends State<SignInPage> {
                       ChangeNotifierProvider(create: (context) => TabbarColor(context: context)),
                       ChangeNotifierProvider(create: (context) => ListViewIndex(context: context)),
                     ],
-                      child: DashboardStyle());
+                      child: XdHomeStyle());
                 },
               ),
             );
