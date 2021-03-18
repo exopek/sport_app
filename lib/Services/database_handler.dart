@@ -23,6 +23,11 @@ class DatabaseHandler {
     docName: workoutName
   );
 
+  Future<void> createRoutine(Routine routine) async => _service.setData(
+    path: CloudPath.setroutine(uid, routine.routineName),
+    data: routine.toMap(),
+  );
+
   Stream<List<Favorite>> favoriteStream() => _service.collectionStream(
     path: CloudPath.getfavorite(uid),
     builder:  (data) => Favorite.fromMap(data),
@@ -30,6 +35,21 @@ class DatabaseHandler {
 
   Stream<List<Workout>> workoutStream() => _service.collectionStream(
     path: CloudPath.getworkouts(),
+    builder:  (data) => Workout.fromMap(data),
+  );
+
+  Stream<List<Routine>> routineStream() => _service.collectionStream(
+    path: CloudPath.getroutine(uid),
+    builder:  (data) => Routine.fromMap(data),
+  );
+
+  Stream<List<Workout>> legWorkoutStream() => _service.collectionStream(
+    path: CloudPath.getlegworkouts(),
+    builder:  (data) => Workout.fromMap(data),
+  );
+
+  Stream<List<Workout>> chestWorkoutStream() => _service.collectionStream(
+    path: CloudPath.getchestworkouts(),
     builder:  (data) => Workout.fromMap(data),
   );
 

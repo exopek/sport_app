@@ -40,8 +40,9 @@ class AddTodoButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(32.0),
+    return OutlineButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      borderSide: BorderSide(color: Colors.white),
       child: GestureDetector(
         onTap: () {
           _signInwithEmail(context, email, password).then((result) {
@@ -73,20 +74,20 @@ class AddTodoButton extends StatelessWidget {
           createRectTween: (begin, end) {
             return CustomRectTween(begin: begin, end: end);
           },
-          child: Material(
-            color: Colors.redAccent,
-            elevation: 2,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-            child: Container(
-              height: MediaQuery.of(context).size.height/14,
-              width: MediaQuery.of(context).size.width/2,
-              child: Center(
-                child: Text('Sign in with Email',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Theme.of(context).primaryColor
+          child: OutlineButton(
+            splashColor: Colors.grey,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+            borderSide: BorderSide(color: Colors.white),
+            highlightedBorderColor: Colors.grey,
+            child: Row(
+              children:[
+                Center(
+                  child: Text('Sign in with Email',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.grey
                 ),),
-              )
+              )]
             ),
           ),
         ),

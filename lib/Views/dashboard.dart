@@ -696,7 +696,7 @@ class _DashboardStyleState extends State<DashboardStyle> {
                             ),
                           ),
                               child: _imageContainerContent(context,
-                                  snapshot.data[Index].bodyPart, snapshot.data[Index].duration, snapshot.data[Index].level, snapshot.data[Index].workout, snapshot.data[Index].thumbnail, snapshot.data[Index].videoPath, Index,),
+                                  snapshot.data[Index].bodyPart, snapshot.data[Index].level, snapshot.data[Index].workout, snapshot.data[Index].thumbnail, snapshot.data[Index].videoPath, Index,),
 
                         );
                     });
@@ -743,7 +743,7 @@ class _DashboardStyleState extends State<DashboardStyle> {
     );
   }
 
-  Widget _imageContainerContent(BuildContext context, String workout, String duration, String level, String bodyPart, String thumbnail, String videoUrl, int index) {
+  Widget _imageContainerContent(BuildContext context, String workout, String level, String bodyPart, String thumbnail, String videoUrl, int index) {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
     return Stack(
         children: [
@@ -783,7 +783,6 @@ class _DashboardStyleState extends State<DashboardStyle> {
                     icon: Icon(MdiIcons.star),
                     onPressed: () => database.createFavorite(Favorite(
                         videoPath: videoUrl,
-                        duration: duration,
                         workout: workout,
                         level: level,
                         thumbnail: thumbnail,

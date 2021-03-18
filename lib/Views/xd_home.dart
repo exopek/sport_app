@@ -12,11 +12,14 @@ import 'package:video_app/CustomWidgets/rating.dart';
 import 'package:video_app/Helpers/helpers.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Notifyers/listViewIndex.dart';
+import 'package:video_app/Notifyers/sortBar_notifyer.dart';
 import 'package:video_app/Notifyers/tabbar_color.dart';
+import 'package:video_app/Notifyers/tag_notifyer.dart';
 import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Services/firebase_auth_service.dart';
 import 'package:video_app/Services/firebase_storage_service.dart';
 import 'package:video_app/Services/storage_handler.dart';
+import 'package:video_app/Views/muskel_auswahl.dart';
 import 'package:video_app/Views/profil.dart';
 import 'package:video_app/Views/settings.dart';
 
@@ -60,20 +63,26 @@ class _XdHomeStyleState extends State<XdHomeStyle> {
 
   getHeaderView<widget>(int index, context) {
     if (index == 0) {
-      return Text('EXOPEK Workouts',
-        style: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w600,
-          color: Colors.grey[500],
+      return Padding(
+        padding: EdgeInsets.only(left: 50.0),
+        child: Text('EXOPEK Workouts',
+          style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[500],
+          ),
         ),
       );
     }
     else if (index == 2) {
-      return Text('EXOPEK Favoriten',
-        style: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w600,
-          color: Colors.grey[500],
+      return Padding(
+        padding: EdgeInsets.only(left: 50.0),
+        child: Text('EXOPEK Favoriten',
+          style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[500],
+          ),
         ),
       );
     }
@@ -93,6 +102,7 @@ class _XdHomeStyleState extends State<XdHomeStyle> {
     final TabbarColor neoBar = Provider.of<TabbarColor>(context);
     final StorageHandler storage = Provider.of<StorageHandler>(context);
     final ListViewIndex index = Provider.of<ListViewIndex>(context);
+    final ButtonbarColor buttonBar = Provider.of<ButtonbarColor>(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       bottomNavigationBar: BottomAppBar(
@@ -170,7 +180,7 @@ class _XdHomeStyleState extends State<XdHomeStyle> {
         child: Stack(
             children:[
               Padding(
-                padding: EdgeInsets.only(top: MediaQuery.of(context).size.height/10),
+                padding: EdgeInsets.only(top: MediaQuery.of(context).size.height/20),
                 child:  _header(context, neoBar.index, index.favoriteIndex),
               ), // ToDo: hier muss der Consumer hin
               //_appBarItems(context)
@@ -186,13 +196,29 @@ class _XdHomeStyleState extends State<XdHomeStyle> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(left: 0.0),
-                          child: _neoButton(context, Icons.build_outlined),
+                          child:  Consumer<ButtonbarColor>(
+                            builder: (context, data, child) {
+                              return _neoButton(context, Icons.build_outlined, data.buttonColor1[1], data.buttonColor1[2], data.buttonColor1[0], 0);
+                            }
+                              )
                         ),
-                        _neoButton(context, Icons.share_outlined),
-                        _neoButton(context, Icons.edit_outlined),
+                        Consumer<ButtonbarColor>(
+                            builder: (context, data, child) {
+                              return _neoButton(context, Icons.build_outlined, data.buttonColor2[1], data.buttonColor2[2], data.buttonColor2[0], 1);
+                            }
+                        ),
+                        Consumer<ButtonbarColor>(
+                            builder: (context, data, child) {
+                              return _neoButton(context, Icons.build_outlined, data.buttonColor3[1], data.buttonColor3[2], data.buttonColor3[0], 2);
+                            }
+                        ),
                         Padding(
                           padding: EdgeInsets.only(right: 0.0,),
-                          child: _neoButton(context, Icons.language_outlined),
+                          child: Consumer<ButtonbarColor>(
+                              builder: (context, data, child) {
+                                return _neoButton(context, Icons.build_outlined, data.buttonColor4[1], data.buttonColor4[2], data.buttonColor4[0], 3);
+                              }
+                          ),
                         )
                       ],
                     )
@@ -240,25 +266,41 @@ class _XdHomeStyleState extends State<XdHomeStyle> {
     );
   }
 
-  Widget _neoButton(BuildContext context, IconData icon) {
+  Widget _neoButton(BuildContext context, IconData icon, Color shadow1, Color shadow2, Color buttonColor, int index) {
+    final ButtonbarColor buttonBarC = Provider.of<ButtonbarColor>(context);
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        buttonBarC.updateButtonColor(index, context);
+        return Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return MultiProvider(
+                  providers: [
+                    //Provider(create: (context) => StorageHandler(uid: storage.uid),),
+                    //Provider(create: (context) => DatabaseHandler(uid: storage.uid),),
+                    ChangeNotifierProvider(create: (context) => TagList())
+                  ],
+                  child: MuskelPage());
+            },
+          ),
+        );
+      },
       child: NeoContainer(
         containerHeight: MediaQuery.of(context).size.height/14,
         containerWidth: MediaQuery.of(context).size.width/8,
         circleShape: false,
-        shadowColor1: Color.fromRGBO(12, 12, 12, 0.8),
-        shadowColor2: Color.fromRGBO(40, 40, 40, 1.0),
+        shadowColor1: shadow1,
+        shadowColor2: shadow2,
         shadow1Offset: 4.5,
         shadow2Offset: -4.5,
         spreadRadius2: 0.0,
         spreadRadius1: 3.0,
         blurRadius1: 5.0,
         blurRadius2: 5.0,
-        gradientColor1: Color.fromRGBO(19, 19, 21, 1.0),
-        gradientColor2: Color.fromRGBO(19, 19, 21, 1.0),
-        gradientColor3: Color.fromRGBO(19, 19, 21, 1.0),
-        gradientColor4: Color.fromRGBO(19, 19, 21, 1.0),
+        gradientColor1: buttonColor,
+        gradientColor2: buttonColor,
+        gradientColor3: buttonColor,
+        gradientColor4: buttonColor,
         containerChild: Center(
           child: Icon(icon, color: Colors.white,),
         ),
@@ -724,7 +766,7 @@ class _XdHomeStyleState extends State<XdHomeStyle> {
                           ),
                         ),
                         child: _imageContainerContent(context,
-                          snapshot.data[Index].bodyPart, snapshot.data[Index].duration, snapshot.data[Index].level, snapshot.data[Index].workout, snapshot.data[Index].thumbnail, snapshot.data[Index].videoPath, Index,),
+                          snapshot.data[Index].bodyPart, snapshot.data[Index].level, snapshot.data[Index].workout, snapshot.data[Index].thumbnail, snapshot.data[Index].videoPath, Index,),
 
                       );
                     });
@@ -771,7 +813,7 @@ class _XdHomeStyleState extends State<XdHomeStyle> {
     );
   }
 
-  Widget _imageContainerContent(BuildContext context, String workout, String duration, String level, String bodyPart, String thumbnail, String videoUrl, int index) {
+  Widget _imageContainerContent(BuildContext context, String workout, String level, String bodyPart, String thumbnail, String videoUrl, int index) {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
     return Stack(
         children: [
@@ -811,7 +853,6 @@ class _XdHomeStyleState extends State<XdHomeStyle> {
                     icon: Icon(MdiIcons.star),
                     onPressed: () => database.createFavorite(Favorite(
                         videoPath: videoUrl,
-                        duration: duration,
                         workout: workout,
                         level: level,
                         thumbnail: thumbnail,

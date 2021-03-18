@@ -45,6 +45,8 @@ dependencies:
   url_launcher: ^5.7.10
   image_picker: ^0.6.7+22
   glassmorphism: ^1.0.6
+  circle_wheel_scroll: ^0.0.1+1
+  flutter_svg: ^0.19.0
   # flutter_neumorphic: ^3.0.4+1
 
 dev_dependencies:
@@ -63,8 +65,11 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  #assets:
-   #  - images/a_dot_burr.jpeg
+  assets:
+    - assets/Thabs.png
+    - assets/Exopek_Logo.png
+    - assets/Logo_Weiß.svg
+    - assets/Logo_weiß.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -78,10 +83,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+     - family: FiraSansExtraCondensed
+       fonts:
+          - asset: fonts/FiraSansExtraCondensed-Black.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

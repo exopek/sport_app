@@ -6,6 +6,7 @@ import 'package:video_app/CustomWidgets/custom_signIn_Button.dart';
 import 'package:video_app/CustomWidgets/neoContainer.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Notifyers/listViewIndex.dart';
+import 'package:video_app/Notifyers/sortBar_notifyer.dart';
 import 'package:video_app/Notifyers/tabbar_color.dart';
 import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Services/firebase_auth_service.dart';
@@ -18,6 +19,7 @@ import 'package:video_app/Views/test_home.dart';
 import 'package:video_app/Views/xd_home.dart';
 
 import 'home.dart';
+import 'home_final.dart';
 import 'neo_home.dart';
 
 class SignInPage extends StatefulWidget {
@@ -58,26 +60,54 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          color: Theme.of(context).primaryColor,
-          child: Center(
-            child: Column(
-              //mainAxisSize: MainAxisSize.max,
-              //mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height/15),
-                FlutterLogo(size: 150),
-                SizedBox(height: MediaQuery.of(context).size.height/15),
-                _signInButtonEmail(context),
-                SizedBox(height: MediaQuery.of(context).size.height/20),
-                _signInButton(context),
-                SizedBox(height: MediaQuery.of(context).size.height/15),
-                _createAccountButton(context)
-              ],
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage('assets/Thabs.png'),
+              )
+            ),
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: Color.fromRGBO(10, 10, 10, 0.7),
+              child: Center(
+                child: Column(
+                  //mainAxisSize: MainAxisSize.max,
+                  //mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(height: MediaQuery.of(context).size.height/3.5),
+                    //FlutterLogo(size: 150),
+                    Padding(
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/8, right: MediaQuery.of(context).size.width/8),
+                      child: _header(context),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height/15),
+                    _signInButtonEmail(context),
+                    //SizedBox(height: MediaQuery.of(context).size.height/100),
+                    _signInButton(context),
+                    //SizedBox(height: MediaQuery.of(context).size.height/15),
+                    _createAccountButton(context)
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
+      ),
+
+    );
+  }
+
+  Widget _header(BuildContext context) {
+    return Text('WELCOME TO THE FUTURE OF FUNCTIONAL TRAINING',
+      style: TextStyle(
+        fontFamily: 'FiraSansExtraCondensed',
+        fontSize: 30,
+        color: Colors.white
       ),
     );
+
   }
 
   Widget _signInButtonEmail(BuildContext context) {
@@ -87,24 +117,16 @@ class _SignInPageState extends State<SignInPage> {
       child: Column(
           children: [
             SizedBox(height: 20.0,),
-            NeoContainer(
-                  containerHeight: MediaQuery.of(context).size.height/17.0,
-                  containerWidth: MediaQuery.of(context).size.width/1.4,
-                  containerBorderRadius: BorderRadius.all(Radius.circular(30.0)),
-                  shadowColor2: Color.fromRGBO(8, 8, 8, 1.0),
-                  shadowColor1: Color.fromRGBO(40, 40, 44, 1.0),
-                  blurRadius1: 2.0,
-                  blurRadius2: 2.0,
-                  spreadRadius1: 2.5,
-                  spreadRadius2: 2.5,
-                  shadow2Offset: -2.0,
-                  shadow1Offset: 3.0,
-                  gradientColor1: Theme.of(context).primaryColor,
-                  gradientColor2: Theme.of(context).primaryColor,
-                  gradientColor3: Theme.of(context).primaryColor,
-                  gradientColor4: Theme.of(context).primaryColor,
-                  circleShape: false,
-                  containerChild: Padding(
+            Container(
+                  height: MediaQuery.of(context).size.height/17.0,
+                  width: MediaQuery.of(context).size.width/1.4,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                      border: Border.all(
+                          color: Colors.grey
+                      )
+                  ),
+                  child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
                     child: TextField(
@@ -120,24 +142,16 @@ class _SignInPageState extends State<SignInPage> {
                 ),),
 
             SizedBox(height: 20.0,),
-            NeoContainer(
-                containerHeight: MediaQuery.of(context).size.height/17.0,
-                containerWidth: MediaQuery.of(context).size.width/1.4,
-                containerBorderRadius: BorderRadius.all(Radius.circular(30.0)),
-                shadowColor2: Color.fromRGBO(8, 8, 8, 1.0),
-                shadowColor1: Color.fromRGBO(40, 40, 44, 1.0),
-                blurRadius1: 2.0,
-                blurRadius2: 2.0,
-                spreadRadius1: 2.5,
-                spreadRadius2: 2.5,
-                shadow2Offset: -2.0,
-                shadow1Offset: 3.0,
-                gradientColor1: Theme.of(context).primaryColor,
-                gradientColor2: Theme.of(context).primaryColor,
-                gradientColor3: Theme.of(context).primaryColor,
-                gradientColor4: Theme.of(context).primaryColor,
-                circleShape: false,
-                containerChild: Padding(
+            Container(
+                height: MediaQuery.of(context).size.height/17.0,
+                width: MediaQuery.of(context).size.width/1.4,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                  border: Border.all(
+                    color: Colors.grey
+                  )
+                ),
+                child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
                     child: TextField(
@@ -152,8 +166,11 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ),
                 ),),
-            SizedBox(height: 5.0,),
-            AddTodoButton(email: emailController.text, password: passwordController.text)
+            SizedBox(height: MediaQuery.of(context).size.height/50,),
+            Padding(
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/15),
+              child: AddTodoButton(email: emailController.text, password: passwordController.text),
+            )
             /*
             OutlineButton(
               splashColor: Colors.redAccent,
@@ -221,9 +238,10 @@ class _SignInPageState extends State<SignInPage> {
                       Provider(create: (context) => StorageHandler(uid: result.uid),),
                       Provider(create: (context) => DatabaseHandler(uid: result.uid),),
                       ChangeNotifierProvider(create: (context) => TabbarColor(context: context)),
+                      ChangeNotifierProvider(create: (context) => ButtonbarColor(context: context)),
                       ChangeNotifierProvider(create: (context) => ListViewIndex(context: context)),
                     ],
-                      child: XdHomeStyle());
+                      child:  HomeFinalPage());
                 },
               ),
             );
