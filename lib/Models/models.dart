@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class OwnUser {
@@ -19,6 +20,37 @@ class ImageFile<File> {
 class DownloadUrl {
   const DownloadUrl({@required this.downloadUrl});
   final String downloadUrl;
+}
+
+class Categories {
+  Categories({@required this.name, @required this.thumbnail});
+
+  final String name;
+  final String thumbnail;
+
+
+  factory Categories.fromMap(Map<String, dynamic> data) {
+    if (data == null) {
+      return null;
+    }
+    final String name = data['name'];
+    final String thumbnail = data['thumbnail'];
+
+
+    return Categories(
+        name: name,
+        thumbnail: thumbnail,
+
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'thumbnail': thumbnail,
+    };
+  }
+
 }
 
 class Favorite {
@@ -127,6 +159,47 @@ class Routine {
     final List<dynamic> workoutNames = data['workoutNames'];
 
     return Routine(
+        videoPaths: videoPaths,
+        count: count,
+        routineName: routineName,
+        thumbnails: thumbnails,
+        workoutNames: workoutNames
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'videoPaths': videoPaths,
+      'count': count,
+      'routineName': routineName,
+      'thumbnails': thumbnails,
+      'workoutNames': workoutNames
+    };
+  }
+
+}
+
+class MyRoutine {
+  MyRoutine({@required this.workoutNames, @required this.thumbnails, @required this.routineName, @required this.videoPaths, @required this.count,});
+
+  final String routineName;
+  final String count;
+  final FieldValue videoPaths;
+  final FieldValue thumbnails;
+  final FieldValue workoutNames;
+
+
+  factory MyRoutine.fromMap(Map<String, dynamic> data) {
+    if (data == null) {
+      return null;
+    }
+    final FieldValue videoPaths = data['videoPaths'];
+    final String count = data['count'];
+    final String routineName = data['routineName'];
+    final FieldValue thumbnails = data['thumbnails'];
+    final FieldValue workoutNames = data['workoutNames'];
+
+    return MyRoutine(
         videoPaths: videoPaths,
         count: count,
         routineName: routineName,

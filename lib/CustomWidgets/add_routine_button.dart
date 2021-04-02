@@ -32,8 +32,10 @@ class AddRoutineButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = Provider.of<DatabaseHandler>(context, listen: false);
     return Container(
-      height: MediaQuery.of(context).size.height/18,
-        width: MediaQuery.of(context).size.width/2,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.blueGrey
+      ),
         child: GestureDetector(
           onTap: () {
             Navigator.of(context).push(HeroDialogRoute(builder: (context) {
@@ -51,20 +53,12 @@ class AddRoutineButton extends StatelessWidget {
             createRectTween: (begin, end) {
               return CustomRectTween(begin: begin, end: end);
             },
-              child: FlatButton.icon(
-                splashColor: Colors.grey,
-                icon: Icon(Icons.add, color: Colors.white,),
-                label: Text('Add Routine'.toUpperCase(),
-                style: TextStyle(
-                  fontFamily: 'FiraSansExtraCondensed',
-                  fontSize: 14.0,
-                  color: Colors.white
-                ),),
+              child: Icon(Icons.add, color: Colors.white,),
               ),
 
           ),
-        ),
-    );
+        );
+
   }
 }
 

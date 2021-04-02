@@ -9,6 +9,9 @@ class CloudPath {
   static String getworkouts() => 'videos/';
   static String setroutine(String uid, String id) => 'users/$uid/routines/$id';
   static String getroutine(String uid) => 'users/$uid/routines/';
+  static String getroutineinput(String uid, String id) => 'users/$uid/routines/';
   static String getlegworkouts() => 'Beine/';
   static String getchestworkouts() => 'Brust/';
+  static String getallworkouts() => 'Alle/';
+  static String getcatergories() => 'kategorien/';
 }

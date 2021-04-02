@@ -13,6 +13,7 @@ import 'package:video_app/Services/firebase_auth_service.dart';
 import 'package:video_app/Services/storage_handler.dart';
 import 'package:video_app/Views/create_account.dart';
 import 'package:video_app/Views/dashboard.dart';
+import 'package:video_app/Views/home_a.dart';
 import 'package:video_app/Views/home_horizontal.dart';
 import 'package:video_app/Views/home_musik_style.dart';
 import 'package:video_app/Views/test_home.dart';
@@ -241,7 +242,7 @@ class _SignInPageState extends State<SignInPage> {
                       ChangeNotifierProvider(create: (context) => ButtonbarColor(context: context)),
                       ChangeNotifierProvider(create: (context) => ListViewIndex(context: context)),
                     ],
-                      child:  HomeFinalPage());
+                      child:  HomeAPage());
                 },
               ),
             );

@@ -17,8 +17,10 @@ class _SamplePlayerState extends State<SamplePlayer> {
     super.initState();
     print(widget.videourl);
     flickManager = FlickManager(
+      autoPlay: true,
       videoPlayerController:
-      VideoPlayerController.network(widget.videourl),
+        VideoPlayerController.network(widget.videourl)
+
     );
   }
 
@@ -30,8 +32,10 @@ class _SamplePlayerState extends State<SamplePlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return RotatedBox(
+      quarterTurns: 3,
       child: FlickVideoPlayer(
+          flickVideoWithControlsFullscreen: FlickFullScreenToggle().enterFullScreenChild,
           flickManager: flickManager
       ),
     );
