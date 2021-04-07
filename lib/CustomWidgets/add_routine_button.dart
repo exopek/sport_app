@@ -75,18 +75,18 @@ class _AddRoutinePopupCard extends StatefulWidget {
   /// {@macro add_todo_popup_card}
   const _AddRoutinePopupCard({Key key}) : super(key: key);
 
-  Future<Routine> _createRoutine(BuildContext context, String name, String count,) async {
+  Future<Routine> _createRoutine(BuildContext context, String name) async {
     try {
       final database = Provider.of<DatabaseHandler>(context, listen: false);
-      List videoPaths = List.generate(int.parse(count), (index) => '');
-      List thumbnails = List.generate(int.parse(count), (index) => '');
-      List workoutNames = List.generate(int.parse(count), (index) => '');
+      List videoPaths = List.generate(0, (index) => '');
+      List thumbnails = List.generate(0, (index) => '');
+      List workoutNames = List.generate(0, (index) => '');
       await database.createRoutine(Routine(
           routineName: name,
           videoPaths: videoPaths,
           thumbnails: thumbnails,
           workoutNames: workoutNames,
-          count: count));
+          count: '0'));
     } catch (e) {
       print(e);
     }
@@ -133,22 +133,11 @@ class __AddRoutinePopupCardState extends State<_AddRoutinePopupCard> {
                       color: Colors.white,
                       thickness: 0.2,
                     ),
-                    TextField(
-                      controller: routineSizeController,
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Wie viele Übungen soll deine Routine enthalten'
-                      ),
-                    ),
-                    const Divider(
-                      color: Colors.white,
-                      thickness: 0.2,
-                    ),
                     OutlineButton(
                       color: Colors.grey,
                         splashColor: Colors.grey,
                         onPressed: () {
-                          widget._createRoutine(context, routineNameController.text, routineSizeController.text);
+                          widget._createRoutine(context, routineNameController.text);
                         },
                       child: Center(
                         child: Text('Speichern'.toUpperCase(),

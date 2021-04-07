@@ -29,10 +29,20 @@ class DatabaseHandler {
     thumb: thumbnails
   );
 
+  Future<void> updateRoutineWorkoutList(List workoutNames, String routineName) async => _service.transactionWorkoutData(
+      path: CloudPath.setroutine(uid, routineName),
+      data: workoutNames,
+  );
+
   Future<void> createRoutine(Routine routine) async => _service.setData(
     path: CloudPath.setroutine(uid, routine.routineName),
     data: routine.toMap(),
   );
+
+  Future<dynamic> getRoutine(String routineName) async => _service.getData(
+    path: CloudPath.setroutine(uid, routineName),
+    //builder: (data) => Routine.fromMap(data),
+      );
 
   Stream<List<Favorite>> favoriteStream() => _service.collectionStream(
     path: CloudPath.getfavorite(uid),

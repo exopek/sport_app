@@ -1,26 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:video_app/CustomWidgets/DraggableListItem.dart';
+import 'package:video_app/CustomWidgets/custom_signIn_Button.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Notifyers/categoryTabBarIndex.dart';
 import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Views/category_a.dart';
+import 'dart:async';
 
-class EditWorkoutPage extends StatelessWidget {
+class EditWorkoutPage extends StatefulWidget {
 
   final routineName;
 
   const EditWorkoutPage({Key key,@required this.routineName}) : super(key: key);
 
   @override
+  _EditWorkoutPageState createState() => _EditWorkoutPageState();
+}
+
+class _EditWorkoutPageState extends State<EditWorkoutPage> {
+
+  List<dynamic> routineInput;
+
+  List workoutList;
+
+  Future<List<dynamic>> getWorkoutList(BuildContext context) async {
+          final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
+          try {
+            final Input = await database.getRoutine(widget.routineName);
+            routineInput = Input;
+          } catch(e) {
+            print(e);
+          }
+          return routineInput;
+  }
+
+  bool firstVisit;
+
+  @override
+  void initState() {
+    firstVisit = false;
+    workoutList = new List();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
+
+    if (firstVisit == false) {
+      getWorkoutList(context).then((value){
+        setState(() {
+          workoutList = value;
+          firstVisit = true;
+        });
+      });
+
+    }
     return Scaffold(
       body: SafeArea(
           child: CustomScrollView(
             slivers:[
               SliverAppBar(
-                  pinned: true,
-                  expandedHeight: 150.0,
+                  pinned: false,
+                  expandedHeight: 250.0,
                   flexibleSpace: FlexibleSpaceBar(
                     title: Text('Meine Workouts',
                       style: TextStyle(
@@ -38,7 +81,7 @@ class EditWorkoutPage extends StatelessWidget {
                       (BuildContext context, int index) {
                     return Column(
                       children: [
-                        _excercises(context),
+                        _excerciseDragandDrop(context),
                         FloatingActionButton(
                           onPressed: () {
                             Navigator.of(context).push(
@@ -47,7 +90,9 @@ class EditWorkoutPage extends StatelessWidget {
                           },
                           child: Center(
                             child: Icon(
-                                Icons.add),
+                                Icons.add,
+
+                            ),
                           ),
                         )
                       ],
@@ -58,6 +103,37 @@ class EditWorkoutPage extends StatelessWidget {
               ),
             ]
           )),
+    );
+  }
+
+  Widget _excerciseDragandDrop(BuildContext context) {
+    final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
+    return Container(
+      height: MediaQuery.of(context).size.height/5,
+      width: MediaQuery.of(context).size.width,
+      child: ReorderableListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          if (workoutList.isNotEmpty)
+            for (int i = 0; i <= workoutList.length-1; i++)
+              DraggableWidget(
+                key: ValueKey(i.toString()),
+                customWidgetString: workoutList[i],
+              )
+        ],
+        onReorder: (oldIndex, newIndex) {
+          if (newIndex > oldIndex) {
+            newIndex -= 1;
+          }
+          final workout = workoutList.removeAt(oldIndex);
+          print(workout);
+          workoutList.insert(newIndex, workout);
+          setState(() {
+            workoutList = workoutList;
+            database.updateRoutineWorkoutList(workoutList, widget.routineName);
+          });
+        },
+      ),
     );
   }
 
@@ -72,7 +148,7 @@ class EditWorkoutPage extends StatelessWidget {
             height: MediaQuery.of(context).size.height/5,
             width: MediaQuery.of(context).size.width,
             child: StreamBuilder<Routine>(
-                stream: database.routineInputStream(routineName),
+                stream: database.routineInputStream(widget.routineName),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     print(snapshot.data);
@@ -126,7 +202,7 @@ class EditWorkoutPage extends StatelessWidget {
               Provider(create: (context) => DatabaseHandler(uid: database.uid),),
               ChangeNotifierProvider(create: (context) => CTabBarIndex(context: context)),
             ],
-            child: CategoryAPage(category: 'Konfigurator', routineName: routineName,));
+            child: CategoryAPage(category: 'Konfigurator', routineName: widget.routineName,));
       },
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(0.0, 1.0);
@@ -142,5 +218,4 @@ class EditWorkoutPage extends StatelessWidget {
       },
     );
   }
-
 }

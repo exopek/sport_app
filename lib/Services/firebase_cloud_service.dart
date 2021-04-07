@@ -23,6 +23,16 @@ class FirestoreService {
     await reference.doc(docName).delete();
   }
 
+  Future<List<T>> getData<T>({@required String path,}) async {
+    Routine newRoutine;
+    final reference = FirebaseFirestore.instance.doc(path);
+    final snapshots = await reference.get();
+     newRoutine = Routine.fromMap(snapshots.data());
+     print(newRoutine);
+     return newRoutine.workoutNames;
+
+  }
+
   Future<void> transactionData({String path, List<dynamic> data, List<dynamic> thumb}) async {
     Routine newRoutine;
     final reference = FirebaseFirestore.instance.doc(path);
@@ -35,6 +45,18 @@ class FirestoreService {
       thumb.forEach((element) {
         newRoutine.thumbnails.add(element);
       }),
+      reference.set(newRoutine.toMap())
+    });
+
+  }
+
+  Future<void> transactionWorkoutData({String path, List<dynamic> data}) async {
+    Routine newRoutine;
+    final reference = FirebaseFirestore.instance.doc(path);
+    final snapshots = reference.get();
+    snapshots.then((docSnapshot) => {
+      newRoutine = Routine.fromMap(docSnapshot.data()),
+      newRoutine.workoutNames.replaceRange(0, newRoutine.workoutNames.length, data),
       reference.set(newRoutine.toMap())
     });
 
@@ -57,7 +79,6 @@ class FirestoreService {
     @required T builder(Map<String, dynamic> data),
   }) {
     final reference = FirebaseFirestore.instance.collection(path).doc(docPath);
-    print('reference: ${reference.snapshots()}');
     final snapshots = reference.snapshots();
     return snapshots.map((snapshot) => builder(snapshot.data()));
   }
