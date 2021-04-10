@@ -23,6 +23,18 @@ class FirestoreService {
     await reference.doc(docName).delete();
   }
 
+  Future<T> getDataMap<T>({@required String path,@required builder(data)}) async {
+    //Routine newRoutine;
+    //var dataMap = new Map();
+    final reference = FirebaseFirestore.instance.doc(path);
+    final snapshots = await reference.get();
+    //newRoutine = Routine.fromMap(snapshots.data()); // Daten in das Model geben
+    //print(newRoutine);
+    //dataMap = {'workoutNames': newRoutine.workoutNames, 'videoPaths': newRoutine.videoPaths};
+    return builder(snapshots.data());
+
+  }
+
   Future<List<T>> getData<T>({@required String path,}) async {
     Routine newRoutine;
     final reference = FirebaseFirestore.instance.doc(path);

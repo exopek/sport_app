@@ -58,10 +58,14 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
 
     }
     return Scaffold(
+      backgroundColor: Colors.grey[900],
       body: SafeArea(
+        top: false,
           child: CustomScrollView(
             slivers:[
               SliverAppBar(
+                elevation: 0.0,
+                  stretch: true,
                   pinned: false,
                   expandedHeight: 250.0,
                   flexibleSpace: FlexibleSpaceBar(
@@ -73,7 +77,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                       ),),
                     background: Image.network(
                       'https://r-cf.bstatic.com/images/hotel/max1024x768/116/116281457.jpg',
-                      fit: BoxFit.fitWidth,
+                      fit: BoxFit.cover,
                     ),
                   )),
               SliverList(
@@ -82,7 +86,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                     return Column(
                       children: [
                         _excerciseDragandDrop(context),
-                        FloatingActionButton(
+                        OutlinedButton(
                           onPressed: () {
                             Navigator.of(context).push(
                                 _createRoute(context)
@@ -91,10 +95,11 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                           child: Center(
                             child: Icon(
                                 Icons.add,
-
+                                color: Colors.white,
                             ),
                           ),
-                        )
+                        ),
+
                       ],
                     );
                   },
@@ -111,6 +116,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
     return Container(
       height: MediaQuery.of(context).size.height/5,
       width: MediaQuery.of(context).size.width,
+      color: Colors.white,
       child: ReorderableListView(
         scrollDirection: Axis.horizontal,
         children: [

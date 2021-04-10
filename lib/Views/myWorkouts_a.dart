@@ -59,11 +59,15 @@ class _MyWorkoutsAPageState extends State<MyWorkoutsAPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[900],
       appBar: AppBar(
+        backgroundColor: Colors.grey[900],
+        elevation: 0.0,
         centerTitle: true,
         title: Text('My Workouts'),
       ),
       body: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
         child: Stack(children: [
           _workouts(context),
           Padding(
@@ -71,13 +75,8 @@ class _MyWorkoutsAPageState extends State<MyWorkoutsAPage> {
             child: _infoSideBar(context)
           ),
           Padding(
-            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/1.4, top: MediaQuery.of(context).size.height/1.4),
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height/10,
-                width: MediaQuery.of(context).size.height/10,
-                child: AddRoutineButton(),
-
-              ),
+            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/1.6, top: MediaQuery.of(context).size.height/1.35,right: 10.0),
+            child: AddRoutineButton(),
           )
         ] ),
       ),
@@ -125,11 +124,24 @@ class _MyWorkoutsAPageState extends State<MyWorkoutsAPage> {
       child: Container(
         height: MediaQuery.of(context).size.height/3,
         width: MediaQuery.of(context).size.width/2,
-        color: Colors.green,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+          color: Colors.white.withOpacity(0.2),
+        ),
+
         child: Stack(
           children: [
-            Center(
-              child: Text(name.toUpperCase()),
+            Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(name.toUpperCase(),
+                style: TextStyle(
+                  fontFamily: 'FiraSansExtraCondensed',
+                  color: Colors.white
+                )
+                ),
+              ),
             ),
             Padding(
               padding: EdgeInsets.all(10.0),
@@ -138,9 +150,13 @@ class _MyWorkoutsAPageState extends State<MyWorkoutsAPage> {
                 child: Container(
                   height: 50,
                   width: 50,
-                  child: OutlinedButton.icon(
-                    icon: Icon(Icons.icecream),
-                      label: Text(''),
+                  child: OutlinedButton(
+                    child: Center(
+                      child: Icon(
+                        Icons.edit,
+                        color: Colors.white
+                      ),
+                    ),
                       onPressed: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) {
@@ -169,35 +185,56 @@ class _MyWorkoutsAPageState extends State<MyWorkoutsAPage> {
       width: MediaQuery.of(context).size.width/2,
       child: Column(
         children: [
-          Text('Übersicht',
-          style: TextStyle(
-            fontFamily: 'FiraSansExtraCondensed',
-            fontSize: 30.0,
-            color: Colors.black
-          ),),
-          Container(
-            height: MediaQuery.of(context).size.height/1.6,
-            width: MediaQuery.of(context).size.width/2,
-            color: Colors.red,
-            child: StreamBuilder<List<Routine>>(
-              stream: database.routineStream(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    itemCount: snapshot.data[_infoState].workoutNames.length,
-                    itemBuilder: (context, adex) {
-                      print(snapshot.data.length);
-                      return Container(
-                        color: Colors.yellow,
-                          height: 30.0,
-                          width: 50,
-                          child: Text(snapshot.data[_infoState].workoutNames[adex]));
-                    },
-                  );
-                } else {
-                  return Container();
+          Padding(
+            padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+            child: Text('Übersicht',
+            style: TextStyle(
+              fontFamily: 'FiraSansExtraCondensed',
+              fontSize: 30.0,
+              color: Colors.white.withOpacity(0.86)
+            ),),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 10.0),
+            child: Container(
+              height: MediaQuery.of(context).size.height/1.6,
+              width: MediaQuery.of(context).size.width/2,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                color: Colors.white.withOpacity(0.2),
+              ),
+
+              child: StreamBuilder<List<Routine>>(
+                stream: database.routineStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.separated(
+                      separatorBuilder: (context, index) => Divider(
+                        color: Colors.black,
+                      ),
+                      itemCount: snapshot.data[_infoState].workoutNames.length,
+                      itemBuilder: (context, adex) {
+                        print(snapshot.data.length);
+                        return Container(
+                          color: Colors.transparent,
+                            height: 60.0,
+                            child: Center(
+                                child: Text(snapshot.data[_infoState].workoutNames[adex],
+                                style: TextStyle(
+                                    fontFamily: 'FiraSansExtraCondensed',
+                                    fontSize: 20.0,
+                                  color: Colors.white.withOpacity(0.86)
+                                ),
+                                )
+                            )
+                        );
+                      },
+                    );
+                  } else {
+                    return Container();
+                  }
                 }
-              }
+              ),
             ),
           )
         ],

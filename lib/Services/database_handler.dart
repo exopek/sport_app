@@ -44,6 +44,11 @@ class DatabaseHandler {
     //builder: (data) => Routine.fromMap(data),
       );
 
+  Future<dynamic> getRoutineCustomMap(String routineName) async => _service.getDataMap(
+    path: CloudPath.setroutine(uid, routineName),
+    builder: (data) => Routine.fromMap(data),
+  );
+
   Stream<List<Favorite>> favoriteStream() => _service.collectionStream(
     path: CloudPath.getfavorite(uid),
     builder:  (data) => Favorite.fromMap(data),

@@ -31,33 +31,62 @@ class AddRoutineButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = Provider.of<DatabaseHandler>(context, listen: false);
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.blueGrey
-      ),
-        child: GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-              return MultiProvider(
-                  providers: [
-                    Provider(create: (context) => DatabaseHandler(uid: database.uid),),
-                  ],
-                  child: const _AddRoutinePopupCard());
-            }
-            )
-            );
-          },
-          child: Hero(
-            tag: _heroAddRoutine,
-            createRectTween: (begin, end) {
-              return CustomRectTween(begin: begin, end: end);
-            },
-              child: Icon(Icons.add, color: Colors.white,),
-              ),
-
+    return Hero(
+      tag: _heroAddRoutine,
+      createRectTween: (begin, end) {
+        return CustomRectTween(begin: begin, end: end);
+      },
+      child: Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        child: Container(
+          height: 80.0,
+          width: 140.0,
+          decoration: BoxDecoration(
+            //shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+            border: Border.all(
+              color: Colors.white
+            ),
+            color: Colors.grey[900]
           ),
-        );
+            child: Stack(
+              children: [
+                Center(
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+                      return MultiProvider(
+                          providers: [
+                            Provider(create: (context) => DatabaseHandler(uid: database.uid),),
+                          ],
+                          child: const _AddRoutinePopupCard());
+                    }
+                    )
+                    );
+                  },
+                  /*
+                child: Hero(
+                  tag: _heroAddRoutine,
+                  createRectTween: (begin, end) {
+                    return CustomRectTween(begin: begin, end: end);
+                  },
+                    child: Icon(Icons.add, color: Colors.white,),
+                    ),
+
+                 */
+
+                ),
+              ]
+            ),
+            ),
+      ),
+    );
 
   }
 }
@@ -112,7 +141,7 @@ class __AddRoutinePopupCardState extends State<_AddRoutinePopupCard> {
             return CustomRectTween(begin: begin, end: end);
           },
           child: Material(
-            color: Colors.redAccent,
+            color: Colors.white.withOpacity(0.4),
             elevation: 2,
             shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),

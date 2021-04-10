@@ -12,6 +12,8 @@ import 'package:video_app/Views/category_a.dart';
 import 'package:video_app/Views/myWorkouts_a.dart';
 import 'package:video_app/Views/workout_a.dart';
 
+import 'category_myworkouts_a.dart';
+
 class HomeAPage extends StatefulWidget {
   @override
   _HomeAPageState createState() => _HomeAPageState();
@@ -120,6 +122,8 @@ class _HomeAPageState extends State<HomeAPage> {
 
   Widget _workoutContainerContent(BuildContext context, String name, String thumbnail, int index, double scale) {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
+    var route = {'Excercises' : CategoryAPage(category: name,),
+                    'My Workouts' : CategoryMyWorkouts()};
     return Stack(
         children: [
           Padding(
@@ -136,7 +140,7 @@ class _HomeAPageState extends State<HomeAPage> {
                           Provider(create: (context) => DatabaseHandler(uid: database.uid),),
                           ChangeNotifierProvider(create: (context) => CTabBarIndex(context: context)),
                         ],
-                        child: CategoryAPage(category: name,));
+                        child: route[name]);
                   },
                 ),
               ),
