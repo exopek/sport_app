@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:video_player/video_player.dart';
@@ -13,7 +14,9 @@ class SamplePlayer2 extends StatefulWidget {
 }
 
 class _SamplePlayer2State extends State<SamplePlayer2> {
-  FlickManager flickManager;
+  FlickManager _flickManager;
+
+  VideoPlayerController videoPlayerController;
 
   String _videoUrl;
 
@@ -22,22 +25,62 @@ class _SamplePlayer2State extends State<SamplePlayer2> {
   @override
   void initState() {
     super.initState();
-    print('drin');
+    videoPlayerController = VideoPlayerController.network(widget.videourl[0]);
     _currentIndex = 0;
-    _videoUrl = widget.videourl[0];
+    //videoPlayerController.addListener(());
+    _videoUrl = widget.videourl[_currentIndex];
     print(_videoUrl);
-    flickManager = FlickManager(
+    _flickManager = FlickManager(
+        
         autoPlay: true,
-        videoPlayerController:
-        VideoPlayerController.network(_videoUrl)
+        videoPlayerController: videoPlayerController
+
 
     );
+    //_flickManager.flickVideoManager.videoPlayerController.setLooping(true);
+  }
+
+  void initVideoPlayer() async {
+
+    if (_currentIndex <= widget.videourl.length) {
+      _currentIndex += 1;
+      _videoUrl = widget.videourl[_currentIndex];
+
+      videoPlayerController = VideoPlayerController.network(widget.videourl[_currentIndex]);
+
+      setState(() {
+        _flickManager.dispose();
+        videoPlayerController.pause();
+        videoPlayerController.seekTo(Duration(seconds: 0));
+        _flickManager = FlickManager(
+
+            autoPlay: true,
+            videoPlayerController: videoPlayerController
+
+
+
+        );
+        _flickManager.flickVideoManager.videoPlayerController.pause();
+        _flickManager.flickVideoManager.videoPlayerController.seekTo(Duration(seconds: 0));
+
+      });
+      // ToDo: Timer Liste kommt hier noch hin
+      print('currentIndex: $_currentIndex');
+      print('videoUrl: $_videoUrl');
+    } else {
+      // ToDo: PageRoute,das Workout ist beendet
+    }
+
+
+    //_flickManager.flickVideoManager.videoPlayerController.setLooping(true);
   }
 
 
   @override
   void dispose() {
-    flickManager.dispose();
+    //_flickManager.flickVideoManager.videoPlayerController.pause();
+    videoPlayerController.dispose();
+    _flickManager.dispose();
     super.dispose();
   }
 
@@ -45,21 +88,7 @@ class _SamplePlayer2State extends State<SamplePlayer2> {
 
   void timer() {
     Timer(Duration(seconds: 8) , () {
-      setState(() {
-        if (_currentIndex <= widget.videourl.length) {
-          _currentIndex += 1;
-          _videoUrl = widget.videourl[_currentIndex];
-          flickManager = FlickManager(
-              autoPlay: true,
-              videoPlayerController:
-              VideoPlayerController.network(_videoUrl));
-          // ToDo: Timer Liste kommt hier noch hin
-          print('currentIndex: $_currentIndex');
-        } else {
-          // ToDo: PageRoute,das Workout ist beendet
-        }
-
-      });
+      initVideoPlayer();
     });
   }
 
@@ -81,10 +110,7 @@ class _SamplePlayer2State extends State<SamplePlayer2> {
                   Container(
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
-                    child: FlickVideoPlayer(
-                        flickVideoWithControlsFullscreen: FlickFullScreenToggle().enterFullScreenChild,
-                        flickManager: flickManager,
-                    ),
+                    child: _playView()
                   ),
                   Stepper(
 
@@ -92,10 +118,8 @@ class _SamplePlayer2State extends State<SamplePlayer2> {
                         for (var item in widget.videourl)
                           Step(title: Text(''), content: Text(''))
                       ],
-                    currentStep: _currentIndex,
-                    onStepContinue: () {
 
-                    },
+                    currentStep: _currentIndex,
                     controlsBuilder: (BuildContext context, {
                       VoidCallback onStepContinue, VoidCallback onStepCancel
                     }) => Container(),
@@ -120,5 +144,17 @@ class _SamplePlayer2State extends State<SamplePlayer2> {
     );
 
        */
+  }
+
+  Widget _playView() {
+    print('duration: ${_flickManager.flickVideoManager.videoPlayerController.value.duration}');
+    _flickManager.flickVideoManager.videoPlayerController.play();
+    return FlickVideoPlayer(
+        flickVideoWithControlsFullscreen: FlickFullScreenToggle()
+          ..enterFullScreenChild,
+        flickManager: _flickManager
+
+
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Views/videoPlayer2_a.dart';
+import 'package:video_app/Views/videoPlayerChewie.dart';
 
 class Workout2APage extends StatefulWidget {
 
@@ -145,7 +146,7 @@ class _Workout2APageState extends State<Workout2APage> {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) {
-                        return SamplePlayer2(videourl: videoPathList); //Hier was machen
+                        return Videos(videourl: videoPathList); //Hier was machen
                       },
                     ),
                   ),
