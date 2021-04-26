@@ -1,9 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:video_app/CustomWidgets/neoContainer.dart';
+import 'package:video_app/CustomWidgets/persistant_sliver_header.dart';
 import 'package:video_app/Models/models.dart';
+import 'package:video_app/Notifyers/timerEnd_notifyer.dart';
 import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Views/videoPlayer2_a.dart';
 import 'package:video_app/Views/videoPlayerChewie.dart';
+import 'package:video_app/Views/videoPlayer_withListView.dart';
 
 class Workout2APage extends StatefulWidget {
 
@@ -62,53 +67,86 @@ class _Workout2APageState extends State<Workout2APage> {
     }
 
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       body: CustomScrollView(
+        physics: BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics()
+        ),
         slivers: [
-
+          SliverPersistentHeader(
+            pinned: true, // header bleibt fest bei minExtent
+            //floating: true,     // Scrollt den gesamten header weg
+            delegate: NetworkingPageHeader(
+              minExtent: 250.0,
+              maxExtent: MediaQuery.of(context).size.height,
+              headerName: widget.routineName
+            ),
+          ),
+          /*
           SliverAppBar(
-            expandedHeight: MediaQuery.of(context).size.height,
-            collapsedHeight: 250.0,
-            pinned: true,
+            expandedHeight: MediaQuery.of(context).size.height/1.02,
+            //collapsedHeight: 100.0,
+            //pinned: true,
             floating: true,
-            backgroundColor: Colors.white,
+              backgroundColor: Theme.of(context).primaryColor,
+            stretchTriggerOffset: 250.0,
+
+            onStretchTrigger: () {
+              return;
+            },
+
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(25.0), bottomRight: Radius.circular(25.0))
             ),
-            elevation: 5.0,
+            elevation: 0.0,
               flexibleSpace: FlexibleSpaceBar(
+                stretchModes: <StretchMode>[
+                  StretchMode.zoomBackground,
+                  StretchMode.blurBackground,
+                  StretchMode.fadeTitle,
+                ],
                 centerTitle: true,
-
                 title: Text(widget.routineName,
                   style: TextStyle(
                       fontFamily: 'FiraSansExtraCondensed',
                       fontSize: 30.0,
                       color: Colors.black
                   ),),
-                background: Image.network(
-                  'https://r-cf.bstatic.com/images/hotel/max1024x768/116/116281457.jpg',
-                  fit: BoxFit.cover,
+                background: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.network(
+                      'https://r-cf.bstatic.com/images/hotel/max1024x768/116/116281457.jpg',
+                      fit: BoxFit.cover,
+                    ),
+                  ]
                 ),
               )
           ),
-          
-          SliverAppBar(
-            elevation: 0.0,
-            expandedHeight: 50.0,
-            automaticallyImplyLeading: false,
-            title: Text('Übersicht',
-              style: TextStyle(
-                  color: Colors.white
-              ),),
-            /*
-            Padding(
-              padding: EdgeInsets.only(left: 20.0),
-              child: Text('Übersicht',
-                style: TextStyle(
-                    color: Colors.white
-                ),),
+          */
+          SliverToBoxAdapter(
+            child: Container(
+              height: 100.0,
+              child: Padding(
+                padding: EdgeInsets.all(0.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    height: 40.0,
+                    width: 200.0,
+                    color: Colors.red,
+                    child: Center(
+                      child: Text('Übersicht',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'FiraSansExtraCondensed',
+                            fontSize: 22.0
+                        ),),
+                    ),
+                  ),
+                ),
+              ),
             ),
-
-             */
           ),
           SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -141,12 +179,17 @@ class _Workout2APageState extends State<Workout2APage> {
             actions: [
               Container(
                 width: MediaQuery.of(context).size.width,
-                color: Colors.blue,
+                color: Colors.white,
                 child: GestureDetector(
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) {
-                        return Videos(videourl: videoPathList); //Hier was machen
+                        return MultiProvider(
+                            providers: [
+                              ChangeNotifierProvider(create: (context) => TimerNotifyer()),
+                            ], child: VideoPlayerList(urlList: videoPathList),
+                        );
+
                       },
                     ),
                   ),
@@ -154,7 +197,8 @@ class _Workout2APageState extends State<Workout2APage> {
                     child: Text('Start'.toUpperCase(),
                       style: TextStyle(
                           fontFamily: 'FiraSansExtraCondensed',
-                          color: Colors.black
+                          color: Colors.black,
+                        fontSize: 25.0
                       ),),
                   ),
                 ),

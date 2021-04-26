@@ -53,7 +53,6 @@ class _SamplePlayer2State extends State<SamplePlayer2> {
         videoPlayerController.pause();
         videoPlayerController.seekTo(Duration(seconds: 0));
         _flickManager = FlickManager(
-
             autoPlay: true,
             videoPlayerController: videoPlayerController
 

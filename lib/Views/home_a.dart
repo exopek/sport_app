@@ -9,7 +9,9 @@ import 'package:video_app/Notifyers/infoTextRoutine_notifyer.dart';
 import 'package:video_app/Notifyers/tabbar_color.dart';
 import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Views/category_a.dart';
+import 'package:video_app/Views/functional_a.dart';
 import 'package:video_app/Views/myWorkouts_a.dart';
+import 'package:video_app/Views/settings.dart';
 import 'package:video_app/Views/workout_a.dart';
 
 import 'category_myworkouts_a.dart';
@@ -42,18 +44,51 @@ class _HomeAPageState extends State<HomeAPage> {
 
   @override
   Widget build(BuildContext context) {
+    final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
     return Scaffold(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Theme.of(context).primaryColor,
       body: Container(
         height: MediaQuery.of(context).size.height,
         width:  MediaQuery.of(context).size.width,
         child: Stack(
           children: [
             Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return MultiProvider(
+                              providers: [
+                                Provider(create: (context) => DatabaseHandler(uid: database.uid),),
+                                ChangeNotifierProvider(create: (context) => CTabBarIndex(context: context)),
+                              ],
+                              child: SettingsPage());
+                        },
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: 50.0,
+                    width: 50.0,
+                    child: Center(
+                      child: Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Center(child: _catergories(context)),
+            Padding(
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/8, top: MediaQuery.of(context).size.height/6),
               child: _catergoriesHeader(context),
             ),
-            Center(child: _catergories(context)),
             Padding(
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/10, right: MediaQuery.of(context).size.width/10,top: MediaQuery.of(context).size.height/1.2),
               child: _navigationBar(context),
@@ -67,8 +102,9 @@ class _HomeAPageState extends State<HomeAPage> {
   Widget _catergories(BuildContext context) {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
     return Container(
-      height: MediaQuery.of(context).size.height/2,
+      height: MediaQuery.of(context).size.height/1.5,
       width: MediaQuery.of(context).size.width,
+      color: Theme.of(context).primaryColor,
       child: StreamBuilder<List<Categories>>(
         stream: database.categoriesStream(),
         builder: (context, snapshot) {
@@ -106,7 +142,7 @@ class _HomeAPageState extends State<HomeAPage> {
         children: [
           Padding(
             padding: EdgeInsets.only(
-                right: 20.0,
+                right: 15.0,
                 top: 50 - scale * 25,
                 bottom: 10),
             child: Container(
@@ -123,14 +159,15 @@ class _HomeAPageState extends State<HomeAPage> {
   Widget _workoutContainerContent(BuildContext context, String name, String thumbnail, int index, double scale) {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
     var route = {'Excercises' : CategoryAPage(category: name,),
-                    'My Workouts' : CategoryMyWorkouts()};
-    return Stack(
-        children: [
+                    'My Workouts' : CategoryMyWorkouts(),
+                      'Functional' : FunctionalWorkoutsPage()};
+    return Center(
+        child:
           Padding(
             padding: EdgeInsets.only(
                 right: 20.0,
                 top: 50 - scale * 25,
-                bottom: 10),
+                bottom: 10.0),
             child: GestureDetector(
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(
@@ -144,38 +181,48 @@ class _HomeAPageState extends State<HomeAPage> {
                   },
                 ),
               ),
-              child: Material(
-                borderRadius: BorderRadius.circular(35.0 ),
-                elevation: 5.0,
-                shadowColor: Colors.grey[200],
-                child: Container(
-                  width: MediaQuery.of(context).size.width/1.0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
-                      borderRadius: BorderRadius.all(Radius.circular(35.0))
-                    ),
-                    child: Center(
-                      child: Text(name.toUpperCase(),
-                      style: TextStyle(
-                        fontFamily: 'FiraSansExtraCondensed',
-                        fontSize: 30.0,
-                        color: Colors.white
-                      ),),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(thumbnail),
-                          fit: BoxFit.fill
+                child: NeoContainer(
+                  containerHeight: MediaQuery.of(context).size.height/2,
+                  containerWidth: MediaQuery.of(context).size.width,
+                  shadowColor1: Colors.grey,
+                  shadowColor2: Color.fromRGBO(15, 15, 15, 1.0),
+                  shadow2Offset: 4.0,
+                  shadow1Offset: -3.0,
+                  spreadRadius1: 1.0,
+                  spreadRadius2: 5.0,
+                  blurRadius1: 5.0,
+                  blurRadius2: 3.5,
+                  circleShape: false,
+                  borderColor: Colors.white,
+                  containerBorderRadius: BorderRadius.all(Radius.circular(35.0)),
+                  containerChild: Container(
+                    width: MediaQuery.of(context).size.width/1.0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.3),
+                        borderRadius: BorderRadius.all(Radius.circular(35.0))
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(35.0))
+                      child: Center(
+                        child: Text(name.toUpperCase(),
+                        style: TextStyle(
+                          fontFamily: 'FiraSansExtraCondensed',
+                          fontSize: 30.0,
+                          color: Colors.white
+                        ),),
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(thumbnail),
+                            fit: BoxFit.fill
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(35.0))
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ]
+
     );
   }
 

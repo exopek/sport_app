@@ -25,12 +25,13 @@ class NeoContainer extends StatelessWidget {
   final Color gradientColor2;
   final Color gradientColor3;
   final Color gradientColor4;
+  final Color borderColor;
 
 
   const NeoContainer(
       {Key key, this.containerColor, @required this.shadowColor1, @required this.shadowColor2, this.animationDuration, this.containerHeight, this.containerWidth, this.containerText,
         this.blurRadius1, this.blurRadius2, this.shadow1Offset, this.shadow2Offset, this.spreadRadius1, this.spreadRadius2, this.containerBoxShape, this.containerBorderRadius, this.containerChild, this.imagePath,
-        this.circleShape, this.gradientColor1, this.gradientColor2, this.gradientColor3, this.gradientColor4}) : super(key: key);
+        this.circleShape, this.gradientColor1, this.gradientColor2, this.gradientColor3, this.gradientColor4, this.borderColor}) : super(key: key);
 
 
   @override
@@ -53,7 +54,9 @@ class NeoContainer extends StatelessWidget {
               colors: [gradientColor1 ?? Colors.grey[200] ,gradientColor2 ?? Colors.grey[300] , gradientColor3 ?? Colors.grey[400], gradientColor4 ?? Colors.grey[500]],
               stops: [0.1, 0.3, 0.8, 0.9]
             ),
-
+              border: Border.all(
+                color: borderColor ?? Colors.transparent,
+              ),
               borderRadius: containerBorderRadius ??
                   BorderRadius.all(Radius.circular(10.0)),
               // BorderRadius.all(Radius.circular(10.0)

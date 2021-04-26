@@ -14,4 +14,5 @@ class CloudPath {
   static String getchestworkouts() => 'Brust/';
   static String getallworkouts() => 'Alle/';
   static String getcatergories() => 'kategorien/';
+  static String getfunctionalworkouts() => 'functionalWorkouts/';
 }

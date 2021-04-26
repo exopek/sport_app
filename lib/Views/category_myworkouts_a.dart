@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:video_app/CustomWidgets/neoContainer.dart';
 import 'package:video_app/Helpers/blank.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Views/workout2_a.dart';
 import 'package:video_app/Views/workout_a.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CategoryMyWorkouts extends StatelessWidget {
+
+  ScrollController myWorkoutsController = ScrollController();
+
+  BouncingScrollPhysics myWorkoutsPhysics = BouncingScrollPhysics();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 5.0,
+        title: Text(
+          'Meine Workouts',
+          style: TextStyle(
+            color: Colors.white
+          ),
+        ),
+      ),
       body: SafeArea(
         top: false,
           child: _listView(context)),
@@ -26,9 +43,12 @@ class CategoryMyWorkouts extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return  ListView.builder(
+              controller: myWorkoutsController,
+              physics: myWorkoutsPhysics,
               itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
+                  return InkWell(
+                    splashColor: Colors.white,
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -49,7 +69,7 @@ class CategoryMyWorkouts extends StatelessWidget {
           } else {
             return SingleChildScrollView(
               child: CircularProgressIndicator(
-                backgroundColor: Colors.redAccent,
+                backgroundColor: Theme.of(context).primaryColor,
               ),
             );
           }
@@ -60,18 +80,60 @@ class CategoryMyWorkouts extends StatelessWidget {
 
   Widget _listViewInput(BuildContext context, String routineNme) {
     return Padding(
-      padding: EdgeInsets.only(top: 10.0),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height/5,
-        color: Theme.of(context).primaryColor,
-        child: Center(
-          child: Text(routineNme,
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'FiraSansExtraCondensed',
-            fontSize: 30.0
-          ),),
+      padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.01, right: MediaQuery.of(context).size.width*0.02, left: MediaQuery.of(context).size.width*0.02, bottom: MediaQuery.of(context).size.height*0.01),
+      child: Material(
+        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        child: NeoContainer(
+          circleShape: false,
+          containerHeight: MediaQuery.of(context).size.height/5,
+            containerWidth: MediaQuery.of(context).size.width,
+            shadowColor1: Colors.black,
+            shadowColor2: Colors.white,
+            gradientColor1: Theme.of(context).primaryColor,
+            gradientColor2: Theme.of(context).primaryColor,
+            gradientColor3: Theme.of(context).primaryColor,
+            gradientColor4: Theme.of(context).primaryColor,
+          containerChild: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(MediaQuery.of(context).size.height*0.02),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(routineNme,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'FiraSansExtraCondensed',
+                        fontSize: 30.0
+                    ),),
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.all(MediaQuery.of(context).size.height*0.02),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Image(
+                      height: 40.0,
+                      width: 120.0,
+                      image: AssetImage(
+                          'assets/Exopek_Logo.png',
+
+                      ),
+                    )
+                  ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.17),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height/10,
+                    width: MediaQuery.of(context).size.width/40,
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            ]
+          ),
         ),
       ),
     );

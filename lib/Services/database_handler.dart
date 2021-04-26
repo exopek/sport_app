@@ -90,5 +90,8 @@ class DatabaseHandler {
     builder:  (data) => Categories.fromMap(data),
   );
 
-
+  Stream<List<Workout>> functionalStream() => _service.collectionStream(
+    path: CloudPath.getfunctionalworkouts(),
+    builder:  (data) => Workout.fromMap(data),
+  );
 }
