@@ -10,6 +10,7 @@ import 'package:video_app/Notifyers/tabbar_color.dart';
 import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Views/category_a.dart';
 import 'package:video_app/Views/functional_a.dart';
+import 'package:video_app/Views/mobility_a.dart';
 import 'package:video_app/Views/myWorkouts_a.dart';
 import 'package:video_app/Views/settings.dart';
 import 'package:video_app/Views/workout_a.dart';
@@ -160,7 +161,8 @@ class _HomeAPageState extends State<HomeAPage> {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
     var route = {'Excercises' : CategoryAPage(category: name,),
                     'My Workouts' : CategoryMyWorkouts(),
-                      'Functional' : FunctionalWorkoutsPage()};
+                      'Functional' : FunctionalWorkoutsPage(),
+                      'Mobility' : MobilityWorkoutsPage()};
     return Center(
         child:
           Padding(

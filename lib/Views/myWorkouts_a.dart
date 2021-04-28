@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:video_app/CustomWidgets/add_routine_button.dart';
+import 'package:video_app/CustomWidgets/neoContainer.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Notifyers/infoTextRoutine_notifyer.dart';
 import 'package:video_app/Services/database_handler.dart';
@@ -59,9 +60,9 @@ class _MyWorkoutsAPageState extends State<MyWorkoutsAPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Theme.of(context).primaryColor,
         elevation: 0.0,
         centerTitle: true,
         title: Text('My Workouts'),
@@ -121,20 +122,34 @@ class _MyWorkoutsAPageState extends State<MyWorkoutsAPage> {
     return Padding(
       padding: EdgeInsets.only(top: 10, bottom: 10,
       left: 10, right: 50 - scale * 25),
-      child: Container(
-        height: MediaQuery.of(context).size.height/3,
-        width: MediaQuery.of(context).size.width/2,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-          color: Colors.white.withOpacity(0.2),
-        ),
-
-        child: Stack(
+      child: NeoContainer(
+        containerHeight: MediaQuery.of(context).size.height/3,
+        containerWidth: MediaQuery.of(context).size.width/2,
+        containerBorderRadius: BorderRadius.all(Radius.circular(15.0)),
+        circleShape: false,
+        shadowColor2: Colors.grey,
+        shadowColor1: Colors.black,
+        gradientColor1: Theme.of(context).primaryColor,
+        gradientColor2: Theme.of(context).primaryColor,
+        gradientColor3: Theme.of(context).primaryColor,
+        gradientColor4: Theme.of(context).primaryColor,
+        containerChild: Stack(
           children: [
             Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
+              padding: EdgeInsets.only(left: 20.0),
               child: Align(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.topLeft,
+                child: Container(
+                  height: MediaQuery.of(context).size.height/10,
+                  width: MediaQuery.of(context).size.height/60,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 10.0, left: 8.0),
+              child: Align(
+                alignment: Alignment.bottomLeft,
                 child: Text(name.toUpperCase(),
                 style: TextStyle(
                   fontFamily: 'FiraSansExtraCondensed',
@@ -150,7 +165,14 @@ class _MyWorkoutsAPageState extends State<MyWorkoutsAPage> {
                 child: Container(
                   height: 50,
                   width: 50,
-                  child: OutlinedButton(
+                  child: OutlineButton(
+                    borderSide: BorderSide(
+                      color: Colors.white
+                    ),
+                    color: Colors.grey,
+                    splashColor: Colors.grey,
+                    highlightElevation: 5.0,
+                    highlightedBorderColor: Colors.white,
                     child: Center(
                       child: Icon(
                         Icons.edit,
@@ -186,7 +208,7 @@ class _MyWorkoutsAPageState extends State<MyWorkoutsAPage> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+            padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
             child: Text('Übersicht',
             style: TextStyle(
               fontFamily: 'FiraSansExtraCondensed',
@@ -196,15 +218,18 @@ class _MyWorkoutsAPageState extends State<MyWorkoutsAPage> {
           ),
           Padding(
             padding: EdgeInsets.only(right: 10.0),
-            child: Container(
-              height: MediaQuery.of(context).size.height/1.6,
-              width: MediaQuery.of(context).size.width/2,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                color: Colors.white.withOpacity(0.2),
-              ),
-
-              child: StreamBuilder<List<Routine>>(
+            child: NeoContainer(
+              containerHeight: MediaQuery.of(context).size.height/1.6,
+              containerWidth: MediaQuery.of(context).size.width/2,
+              containerBorderRadius: BorderRadius.all(Radius.circular(15.0)),
+              circleShape: false,
+              shadowColor2: Colors.grey,
+              shadowColor1: Colors.black,
+              gradientColor1: Theme.of(context).primaryColor,
+              gradientColor2: Theme.of(context).primaryColor,
+              gradientColor3: Theme.of(context).primaryColor,
+              gradientColor4: Theme.of(context).primaryColor,
+              containerChild: StreamBuilder<List<Routine>>(
                 stream: database.routineStream(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -214,7 +239,38 @@ class _MyWorkoutsAPageState extends State<MyWorkoutsAPage> {
                       ),
                       itemCount: snapshot.data[_infoState].workoutNames.length,
                       itemBuilder: (context, adex) {
-                        print(snapshot.data.length);
+                        print('------------------------');
+                        //print(snapshot.data[_infoState].workoutNames.first);
+                        // ToDo: Bug -> Beschreibung in Trello
+                        if (snapshot.data[_infoState].workoutNames == null) {
+                          return Container(
+                            color: Colors.transparent,
+                            height: 60.0,
+                            child: Center(
+                              child: Text(
+                                'Erstelle dir dein eigenes Workout',
+                                style: TextStyle(
+                                    fontFamily: 'FiraSansExtraCondensed',
+                                    fontSize: 15.0
+                                ),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return Container(
+                              color: Colors.transparent,
+                              height: 60.0,
+                              child: Center(
+                                  child: Text(snapshot.data[_infoState].workoutNames[adex],
+                                    style: TextStyle(
+                                        fontFamily: 'FiraSansExtraCondensed',
+                                        fontSize: 20.0,
+                                        color: Colors.white.withOpacity(0.86)
+                                    ),
+                                  )
+                              )
+                          );
+                        }
                         return Container(
                           color: Colors.transparent,
                             height: 60.0,
@@ -231,7 +287,17 @@ class _MyWorkoutsAPageState extends State<MyWorkoutsAPage> {
                       },
                     );
                   } else {
-                    return Container();
+                    return Container(
+                      child: Center(
+                        child: Text(
+                          'Erstelle dir dein eigenes Workout',
+                          style: TextStyle(
+                            fontFamily: 'FiraSansExtraCondensed',
+                            fontSize: 25.0
+                          ),
+                        ),
+                      ),
+                    );
                   }
                 }
               ),

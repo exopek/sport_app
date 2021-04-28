@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:video_app/CustomWidgets/neoContainer.dart';
 import 'package:video_app/Helpers/blank.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Notifyers/categoryTabBarIndex.dart';
@@ -73,19 +74,34 @@ class _CategoryAPageState extends State<CategoryAPage> {
             elevation: 0,
           ),
           backgroundColor: Color.fromRGBO(19, 19, 19, 1.0),
-          bottomNavigationBar: FloatingActionButton.extended(
-            onPressed: () {
-              toggleMap.forEach((key, value) {
-                if (value == true) {
-                  thumbnails.add(thumbnailMap[key]);
-                  workoutNames.add(key);
-                  database.updateRoutine(workoutNames, thumbnails, widget.routineName);
-                }
-              });
+          bottomNavigationBar: Container(
+            height: 50.0,
+            child: OutlineButton(
 
-            },
-            icon: Icon(Icons.save),
-            label: Text('Save'),
+              borderSide: BorderSide(
+                color: Colors.white
+              ),
+              child: Center(
+                child: Text(
+                  'SPEICHERN',
+                  style: TextStyle(
+                    fontFamily: 'FiraSansExtraCondensed',
+                    color: Colors.white
+                  ),
+                )
+              ),
+              onPressed: () {
+                toggleMap.forEach((key, value) {
+                  if (value == true) {
+                    thumbnails.add(thumbnailMap[key]);
+                    workoutNames.add(key);
+                    database.updateRoutine(workoutNames, thumbnails, widget.routineName);
+                  }
+                });
+                Navigator.pop(context);
+              },
+
+            ),
           ),
           body: Container(
             height: MediaQuery.of(context).size.height,
@@ -111,10 +127,10 @@ class _CategoryAPageState extends State<CategoryAPage> {
           appBar: AppBar(
             title: Text(widget.category),
             centerTitle: true,
-            backgroundColor: Color.fromRGBO(19, 19, 19, 1.0),
+            backgroundColor: Theme.of(context).primaryColor,
             elevation: 0,
           ),
-          backgroundColor: Color.fromRGBO(19, 19, 19, 1.0),
+          backgroundColor: Theme.of(context).primaryColor,
           body: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
@@ -224,28 +240,37 @@ class _CategoryAPageState extends State<CategoryAPage> {
       return Padding(
         padding: EdgeInsets.only(top: MediaQuery.of(context).size.height/35, left: MediaQuery.of(context).size.width/20, right: MediaQuery.of(context).size.width/20),
         child: Material(
-          borderRadius: BorderRadius.all(Radius.circular(35.0)),
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
           elevation: 5.0,
           shadowColor: Colors.black,
-          child: Container(
-            height: MediaQuery.of(context).size.height/5,
-            width: MediaQuery.of(context).size.width/1.2,
-            decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.all(Radius.circular(35.0))
-            ),
-            child: SwitchListTile(
-              title: Text(workoutTag,
-                style: TextStyle(
-                    color: Colors.white
-                ),),
-              value: toggleMap[workoutTag],
-              onChanged: (bool value) {
-                setState(() {
-                  toggleMap[workoutTag] = value;
-                  thumbnailMap[workoutTag] = thumbnail;
-                });
-              },
+          child: NeoContainer(
+            circleShape: false,
+            containerHeight: MediaQuery.of(context).size.height/10,
+            containerWidth: MediaQuery.of(context).size.width,
+            shadowColor1: Colors.black,
+            shadowColor2: Colors.grey,
+            gradientColor1: Theme.of(context).primaryColor,
+            gradientColor2: Theme.of(context).primaryColor,
+            gradientColor3: Theme.of(context).primaryColor,
+            gradientColor4: Theme.of(context).primaryColor,
+
+            containerBorderRadius: BorderRadius.all(Radius.circular(20.0)),
+
+            containerChild: Center(
+              child: SwitchListTile(
+                title: Text(workoutTag,
+                  style: TextStyle(
+                    fontFamily: 'FiraSansExtraCondensed',
+                      color: Colors.white
+                  ),),
+                value: toggleMap[workoutTag],
+                onChanged: (bool value) {
+                  setState(() {
+                    toggleMap[workoutTag] = value;
+                    thumbnailMap[workoutTag] = thumbnail;
+                  });
+                },
+              ),
             ),
           ),
         ),

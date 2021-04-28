@@ -94,4 +94,9 @@ class DatabaseHandler {
     path: CloudPath.getfunctionalworkouts(),
     builder:  (data) => Workout.fromMap(data),
   );
+
+  Stream<List<Workout>> mobilityStream() => _service.collectionStream(
+    path: CloudPath.getmobilityworkouts(),
+    builder:  (data) => Workout.fromMap(data),
+  );
 }

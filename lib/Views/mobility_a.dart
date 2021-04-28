@@ -5,11 +5,10 @@ import 'package:video_app/Helpers/blank.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Views/workout2_a.dart';
-import 'package:video_app/Views/workout3_a.dart';
 import 'package:video_app/Views/workout_a.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class FunctionalWorkoutsPage extends StatelessWidget {
+class MobilityWorkoutsPage extends StatelessWidget {
 
   ScrollController myWorkoutsController = ScrollController();
 
@@ -40,7 +39,7 @@ class FunctionalWorkoutsPage extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       child: StreamBuilder<List<Workout>>(
-        stream: database.functionalStream(),
+        stream: database.mobilityStream(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return  ListView.builder(
@@ -59,7 +58,7 @@ class FunctionalWorkoutsPage extends StatelessWidget {
                                     Provider(create: (context) => DatabaseHandler(uid: database.uid),),
                                     //ChangeNotifierProvider(create: (context) => CTabBarIndex(context: context)),
                                   ],
-                                  child: Workout3APage(routineName: snapshot.data[index].workout));
+                                  child: Workout2APage(routineName: snapshot.data[index].workout));
                             },
                           ),
                         );

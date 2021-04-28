@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_app/CustomWidgets/DraggableListItem.dart';
 import 'package:video_app/CustomWidgets/custom_signIn_Button.dart';
+import 'package:video_app/CustomWidgets/persistant_sliver_header.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Notifyers/categoryTabBarIndex.dart';
 import 'package:video_app/Services/database_handler.dart';
@@ -63,24 +64,18 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
         top: false,
           child: CustomScrollView(
             slivers:[
-              SliverAppBar(
-                elevation: 0.0,
-                  stretch: true,
-                  pinned: false,
-                  expandedHeight: 250.0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: Text('Meine Workouts',
-                      style: TextStyle(
-                          fontFamily: 'FiraSansExtraCondensed',
-                          fontSize: 30.0,
-                          color: Colors.black
-                      ),),
-                    background: Image.network(
-                      'https://r-cf.bstatic.com/images/hotel/max1024x768/116/116281457.jpg',
-                      fit: BoxFit.cover,
-                    ),
-                  )),
+              SliverPersistentHeader(
+                pinned: true, // header bleibt fest bei minExtent
+                //floating: true,     // Scrollt den gesamten header weg
+                delegate: NetworkingPageHeader(
+                    minExtent: 250.0,
+                    maxExtent: MediaQuery.of(context).size.height,
+                    headerName: widget.routineName
+                ),
+              ),
+              /*
               SliverList(
+
                 delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                     return Column(
@@ -106,6 +101,34 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                   childCount: 1, // 1000 list items
                 ),
               ),
+              */
+              SliverToBoxAdapter(
+                child: Container(
+                  child: Column(
+                    children: [
+                      _excerciseDragandDrop(context),
+                      OutlineButton(
+                        splashColor: Colors.grey,
+                        borderSide: BorderSide(
+                          color: Colors.white
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                              _createRoute(context)
+                          );
+                        },
+                        child: Center(
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+              )
             ]
           )),
     );
@@ -114,11 +137,12 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
   Widget _excerciseDragandDrop(BuildContext context) {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
     return Container(
-      height: MediaQuery.of(context).size.height/5,
+      height: MediaQuery.of(context).size.height/2,
       width: MediaQuery.of(context).size.width,
       color: Colors.white,
       child: ReorderableListView(
-        scrollDirection: Axis.horizontal,
+        //scrollController: ScrollController().,
+        scrollDirection: Axis.vertical,
         children: [
           if (workoutList.isNotEmpty)
             for (int i = 0; i <= workoutList.length-1; i++)
@@ -128,13 +152,14 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
               )
         ],
         onReorder: (oldIndex, newIndex) {
+          setState(() {
           if (newIndex > oldIndex) {
             newIndex -= 1;
           }
           final workout = workoutList.removeAt(oldIndex);
           print(workout);
           workoutList.insert(newIndex, workout);
-          setState(() {
+
             workoutList = workoutList;
             database.updateRoutineWorkoutList(workoutList, widget.routineName);
           });

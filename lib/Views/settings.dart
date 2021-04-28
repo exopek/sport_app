@@ -24,14 +24,17 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+
+  ScrollPhysics settingsScrollPhysics = BouncingScrollPhysics();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
         elevation: 0.0,
-        leading: Container(),
         backgroundColor: Colors.grey[300],
+        centerTitle: true,
         title: Text('Einstellungen',
           style: TextStyle(
               color: Colors.grey[800],
@@ -90,6 +93,7 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
 
        */
+        /*
       bottomNavigationBar: BottomAppBar(
         elevation: 0.0,
         color: Colors.grey[300],
@@ -136,7 +140,9 @@ class _SettingsPageState extends State<SettingsPage> {
       ]
         ),
       ),
+      */
       body: ListView.builder(
+          physics: settingsScrollPhysics,
           itemCount: 1,
           itemBuilder: (BuildContext context, int index) {
             return Column(
