@@ -7,7 +7,8 @@ import 'package:video_app/Notifyers/tabbar_color.dart';
 import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Services/firebase_auth_service.dart';
 import 'package:video_app/Services/storage_handler.dart';
-import 'home_musik_style.dart';
+import 'package:video_app/Views/home_a.dart';
+
 
 class CreateUserAccountPage extends StatelessWidget {
 
@@ -119,7 +120,7 @@ class CreateUserAccountPage extends StatelessWidget {
                               ChangeNotifierProvider(create: (context) => TabbarColor(context: context)),
                               ChangeNotifierProvider(create: (context) => ListViewIndex(context: context)),
                             ],
-                            child: HomePageMusikStyle());
+                            child: HomeAPage());
                       },
                     ),
                   );

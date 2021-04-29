@@ -35,7 +35,7 @@ class _VideoPlayerListState extends State<VideoPlayerList> {
     kill_playVideo = false;
     _videoPlayerController = VideoPlayerController.network(widget.urlList[0]);
     _initializeVideoPlayerFuture = _videoPlayerController.initialize();
-    _videoPlayerController.setLooping(true);
+    _videoPlayerController.setLooping(false);
     _videoPlayerController.play();
     timer();
     //selectedIndex = 0;

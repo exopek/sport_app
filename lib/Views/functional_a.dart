@@ -15,6 +15,7 @@ class FunctionalWorkoutsPage extends StatelessWidget {
 
   BouncingScrollPhysics myWorkoutsPhysics = BouncingScrollPhysics();
 
+  String _header = 'Functional';
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class FunctionalWorkoutsPage extends StatelessWidget {
         centerTitle: true,
         elevation: 5.0,
         title: Text(
-          'Functional Workouts',
+          _header,
           style: TextStyle(
               color: Colors.white
           ),
@@ -39,7 +40,7 @@ class FunctionalWorkoutsPage extends StatelessWidget {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
     return Container(
       width: MediaQuery.of(context).size.width,
-      child: StreamBuilder<List<Workout>>(
+      child: StreamBuilder<List<Routine>>(
         stream: database.functionalStream(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -59,12 +60,12 @@ class FunctionalWorkoutsPage extends StatelessWidget {
                                     Provider(create: (context) => DatabaseHandler(uid: database.uid),),
                                     //ChangeNotifierProvider(create: (context) => CTabBarIndex(context: context)),
                                   ],
-                                  child: Workout3APage(routineName: snapshot.data[index].workout));
+                                  child: Workout3APage(routineName: snapshot.data[index].routineName, category: _header,));
                             },
                           ),
                         );
                       },
-                      child: _listViewInput(context, snapshot.data[index].workout, snapshot.data[index].thumbnail)
+                      child: _listViewInput(context, snapshot.data[index].routineName, snapshot.data[index].thumbnails[0])
                   );
                 });
           } else {

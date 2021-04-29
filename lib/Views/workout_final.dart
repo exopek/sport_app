@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Services/database_handler.dart';
+import 'package:video_app/Views/videoPlayer_withListView.dart';
 
-import '../videoplayerservice.dart';
+//import '../videoplayerservice.dart';
 
 class WorkoutPage extends StatefulWidget {
   @override
@@ -180,7 +181,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) {
-                    return SamplePlayer(videourl: videoUrl);
+                    return VideoPlayerList(urlList: [videoUrl]);
                   },
                 ),
               ),

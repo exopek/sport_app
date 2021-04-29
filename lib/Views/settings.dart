@@ -7,12 +7,13 @@ import 'package:video_app/Notifyers/listViewIndex.dart';
 import 'package:video_app/Notifyers/tabbar_color.dart';
 import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Services/firebase_auth_service.dart';
+import 'package:video_app/Services/firebase_storage_service.dart';
 import 'package:video_app/Services/storage_handler.dart';
 import 'package:video_app/Views/profil.dart';
-import 'package:video_app/Views/test_home.dart';
+
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import 'home_musik_style.dart';
+
 import 'neo_home.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -166,8 +167,11 @@ class _SettingsPageState extends State<SettingsPage> {
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return Provider<FirebaseAuthService>(
-                                      create: (context) => FirebaseAuthService(),
+                                    return MultiProvider(
+                                      providers: [
+                                        Provider(create: (context) => FirebaseAuthService()),
+                                        //Provider(create: (context) => FirebaseStorageService()
+                                      ],
                                       child: ProfilPage(),
                                     );
                                   },

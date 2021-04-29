@@ -14,8 +14,9 @@ class CTabBarIndex extends ChangeNotifier {
   CTabBarIndex({@required this.context});
 
   get cTabBarStream {
-    if (_stream == null) {
-      return _stream;
+    final DatabaseHandler database = Provider.of<DatabaseHandler>(context, listen: false);
+    if (_firstVisit == false) {
+      return database.allWorkoutStream();
     } else {
       return _stream;
     }
@@ -52,6 +53,7 @@ class CTabBarIndex extends ChangeNotifier {
     }
     _index = Index;
     _stream = _currentStreamList[Index];
+    _firstVisit = true;
     notifyListeners();
   }
 }

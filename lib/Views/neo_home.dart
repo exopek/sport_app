@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:video_app/CustomWidgets/neoContainer.dart';
 import 'package:video_app/CustomWidgets/rating.dart';
+import 'package:video_app/Helpers/blank.dart';
 import 'package:video_app/Helpers/helpers.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Notifyers/tabbar_color.dart';
@@ -358,7 +359,7 @@ class HomePageNeo extends StatelessWidget {
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) {
-                          return SamplePlayer(videourl: snapshot.data[Index].videoPath);
+                          return BlankPage();
                         },
                       ),
                     ),
@@ -515,7 +516,7 @@ class HomePageNeo extends StatelessWidget {
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
-                              return SamplePlayer(videourl: value['videoUrls'][Index]);
+                              return BlankPage();
                             },
                           ),
                         ),
@@ -697,6 +698,7 @@ class HomePageNeo extends StatelessWidget {
     );
   }
 
+  /*
   Widget _customProgress(BuildContext context) {
     final tween = MultiTrackTween([
       Track("color1").add(Duration(seconds: 3),
@@ -723,4 +725,6 @@ class HomePageNeo extends StatelessWidget {
 
 
   }
+
+   */
 }

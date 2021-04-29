@@ -16,4 +16,6 @@ class CloudPath {
   static String getcatergories() => 'kategorien/';
   static String getfunctionalworkouts() => 'functionalWorkouts/';
   static String getmobilityworkouts() => 'mobilityWorkouts/';
+  static String functionalworkouts(String id) => 'functionalWorkouts/$id';
+  static String mobilityworkouts(String id) => 'mobilityWorkouts/$id';
 }

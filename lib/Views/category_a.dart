@@ -41,9 +41,16 @@ class _CategoryAPageState extends State<CategoryAPage> {
 
   bool _toggled;
 
+  int index;
+
   var toggleMap = new Map();
 
   var thumbnailMap = new Map();
+
+  void setFirstTabbarIndex() async {
+    final CTabBarIndex tabBarIndex = Provider.of<CTabBarIndex>(context);
+    tabBarIndex.updateIndex(0, widget.category,context);
+  }
 
   void initState() {
     var tabBarMap = {'Functional':functionalTabBar, 'Mobility':mobilityTabBar, 'Excercises':excerciseTabBar, 'Konfigurator':konfiguratorTabBar};
@@ -52,12 +59,15 @@ class _CategoryAPageState extends State<CategoryAPage> {
     currentTabBar = tabBarMap[widget.category];
     firstVisit = false;
     _toggled = false;
+    //setFirstTabbarIndex();
+    //index = 0;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
+    /*
     if (firstVisit == false) {
       final CTabBarIndex tabBarIndex = Provider.of<CTabBarIndex>(context);
       tabBarIndex.updateIndex(0, widget.category,context);
@@ -65,6 +75,8 @@ class _CategoryAPageState extends State<CategoryAPage> {
         firstVisit = true;
       });
     }
+
+     */
     if (widget.category == 'Konfigurator') {
       return Scaffold(
           appBar: AppBar(

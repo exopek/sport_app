@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:video_app/Views/videoPlayer_withListView.dart';
 
 import '../videoplayerservice.dart';
 
@@ -130,7 +131,7 @@ class WorkoutAPage extends StatelessWidget {
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) {
-                return SamplePlayer(videourl: videoUrl);
+                return VideoPlayerList(urlList: [videoUrl]);
               },
             ),
           ),

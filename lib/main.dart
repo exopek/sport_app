@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_app/Services/firebase_auth_service.dart';
-import 'Views/landing.dart';
 import 'Theme/theme.dart' as Theme;
 import 'Views/sign_in.dart';
 

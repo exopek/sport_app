@@ -7,7 +7,7 @@ import 'package:video_app/Helpers/helpers.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Services/firebase_auth_service.dart';
 import 'package:video_app/Services/storage_handler.dart';
-import 'package:video_app/Views/login.dart';
+
 import 'package:video_app/Views/sign_in.dart';
 import 'package:video_app/login_service.dart';
 

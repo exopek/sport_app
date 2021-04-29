@@ -15,7 +15,9 @@ class Workout3APage extends StatefulWidget {
 
   final routineName;
 
-  const Workout3APage({Key key,@required this.routineName}) : super(key: key);
+  final String category;
+
+  const Workout3APage({Key key,@required this.routineName, @required this.category}) : super(key: key);
 
   @override
   _Workout3APageState createState() => _Workout3APageState();
@@ -25,18 +27,24 @@ class Workout3APage extends StatefulWidget {
 class _Workout3APageState extends State<Workout3APage> {
 
 
-  Workout routine;
+  Routine routine;
 
-  String workout;
+  List workout;
 
-  String videoPath;
+  List videoPath;
 
-  Future<Workout> getWorkoutList(BuildContext context) async {
+  Future<Routine> getWorkoutList(BuildContext context) async {
     final DatabaseHandler database = Provider.of<DatabaseHandler>(context);
     try {
-      final Workout Input = await database.getRoutineCustomMap(widget.routineName);
-      routine = Input;
+      if (widget.category == 'Functional') {
+        final Routine Input = await database.getFunctionalWorkoutsMap(widget.routineName);
+        routine = Input;
+      } else if (widget.category == 'Mobility') {
+        final Routine Input = await database.getMobilityWorkoutsMap(widget.routineName);
+        routine = Input;
+      }
     } catch(e) {
+      print('------------Exception---------');
       print(e);
     }
     return routine;
@@ -47,8 +55,8 @@ class _Workout3APageState extends State<Workout3APage> {
   @override
   void initState() {
     firstVisit = false;
-    workout = '';
-    videoPath = '';
+    workout = [];
+    videoPath = [];
     super.initState();
   }
 
@@ -59,8 +67,8 @@ class _Workout3APageState extends State<Workout3APage> {
     if (firstVisit == false) {
       getWorkoutList(context).then((value){
         setState(() {
-          workout = value.workout;
-          videoPath = value.videoPath;
+          workout = value.workoutNames;
+          videoPath = value.videoPaths;
           firstVisit = true;
         });
       });
@@ -164,7 +172,7 @@ class _Workout3APageState extends State<Workout3APage> {
                           height: 50.0,
                           width: MediaQuery.of(context).size.width,
                           child: Center(
-                            child: Text(workout,
+                            child: Text(workout[index],
                               style: TextStyle(
                                   color: Colors.white
                               ),),
@@ -173,7 +181,7 @@ class _Workout3APageState extends State<Workout3APage> {
                       ],
                     );
                   },
-                  childCount: 1
+                  childCount: workout.length
               )),
           SliverAppBar(
             automaticallyImplyLeading: false,
@@ -188,7 +196,7 @@ class _Workout3APageState extends State<Workout3APage> {
                         return MultiProvider(
                           providers: [
                             ChangeNotifierProvider(create: (context) => TimerNotifyer()),
-                          ], child: SamplePlayer(videourl: videoPath),
+                          ], child: VideoPlayerList(urlList: videoPath),
                         );
 
                       },
@@ -213,3 +221,5 @@ class _Workout3APageState extends State<Workout3APage> {
 
 
 }
+
+
