@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "321909380425",
+    "project_id": "videoappexopek",
+    "storage_bucket": "videoappexopek.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:321909380425:android:36835d93bd2043a673f698",
+        "android_client_info": {
+          "package_name": "com.exopek.video_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "321909380425-gcvcqbctqooodhffeoh6idfq74tloodd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.exopek.video_app",
+            "certificate_hash": "dc1f21027b48e812a76f6ed6c382a3e3bd7036c8"
+          }
+        },
+        {
+          "client_id": "321909380425-7k32rngtjb6dt7h9anaft41ta9qkpfk3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBN7utkf4TLM60is0v5Vb5y2p_Jr6H8yb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "321909380425-7k32rngtjb6dt7h9anaft41ta9qkpfk3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
