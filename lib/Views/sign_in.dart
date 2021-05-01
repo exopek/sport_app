@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_app/CustomWidgets/custom_signIn_Button.dart';
-import 'package:video_app/CustomWidgets/neoContainer.dart';
 import 'package:video_app/Models/models.dart';
 import 'package:video_app/Notifyers/listViewIndex.dart';
 import 'package:video_app/Notifyers/sortBar_notifyer.dart';
@@ -12,15 +11,10 @@ import 'package:video_app/Services/database_handler.dart';
 import 'package:video_app/Services/firebase_auth_service.dart';
 import 'package:video_app/Services/storage_handler.dart';
 import 'package:video_app/Views/create_account.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:video_app/Views/home_a.dart';
+import 'dart:ui';
 
-
-import 'package:video_app/Views/xd_home.dart';
-
-
-import 'home_final.dart';
-import 'neo_home.dart';
 
 class SignInPage extends StatefulWidget {
 
@@ -59,22 +53,9 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage('assets/Thabs.png'),
-              )
-            ),
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              color: Color.fromRGBO(10, 10, 10, 0.7),
-              child: Center(
+        physics: BouncingScrollPhysics(),
                 child: Column(
-                  //mainAxisSize: MainAxisSize.max,
+                  mainAxisSize: MainAxisSize.max,
                   //mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(height: MediaQuery.of(context).size.height/3.5),
@@ -92,9 +73,7 @@ class _SignInPageState extends State<SignInPage> {
                   ],
                 ),
               ),
-            ),
-          ),
-      ),
+
 
     );
   }
@@ -113,7 +92,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget _signInButtonEmail(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height/3.0,
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(context).size.width/1.5,
       child: Column(
           children: [
             SizedBox(height: 20.0,),
