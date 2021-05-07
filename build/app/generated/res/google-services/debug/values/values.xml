@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">321909380425-7k32rngtjb6dt7h9anaft41ta9qkpfk3.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">321909380425</string>
+    <string name="google_api_key" translatable="false">AIzaSyBN7utkf4TLM60is0v5Vb5y2p_Jr6H8yb0</string>
+    <string name="google_app_id" translatable="false">1:321909380425:android:36835d93bd2043a673f698</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBN7utkf4TLM60is0v5Vb5y2p_Jr6H8yb0</string>
+    <string name="google_storage_bucket" translatable="false">videoappexopek.appspot.com</string>
+    <string name="project_id" translatable="false">videoappexopek</string>
+</resources>
